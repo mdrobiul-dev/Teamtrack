@@ -6,6 +6,9 @@ require("dotenv").config();
 // this is all the routes 
 const authRoutes = require("./routes/auth.routes");
 const workspaceRoutes  = require("./routes/workspace.routes")
+const boardRoutes  = require("./routes/board.routes")
+
+// middlewear
 const protected = require("./middlewear/auth.middleware");
 
 const app = express();
@@ -18,13 +21,8 @@ app.use(express.json());
 // this is all the routes 
 app.use("/api/auth", authRoutes);
 app.use("/api/workspaces", workspaceRoutes)
+app.use("/api/boards", boardRoutes)
 
-app.get("/api/private", protected, (req, res) => {
-  res.json({
-    message: "You accessed a protected route",
-    userId: req.user.id,
-  });
-});
 
 mongoose
   .connect(process.env.MONGO_URL)
