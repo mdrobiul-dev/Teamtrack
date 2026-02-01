@@ -5,6 +5,6 @@ const { createBoard, getBoards } = require("../controllers/board.controller");
 const router = express.Router();
 
 router.post("/", protected, createBoard);
-router.get("/:workspaceId", protected, getBoards);
+router.get("/workspace/:workspaceId", protected, getBoards);
 
 module.exports = router;

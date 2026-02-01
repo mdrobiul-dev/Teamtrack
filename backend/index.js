@@ -7,9 +7,9 @@ require("dotenv").config();
 const authRoutes = require("./routes/auth.routes");
 const workspaceRoutes  = require("./routes/workspace.routes")
 const boardRoutes  = require("./routes/board.routes")
+const listRoutes = require("./routes/list.routes")
+const taskRoutes  = require("./routes/task.routes")
 
-// middlewear
-const protected = require("./middlewear/auth.middleware");
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -22,6 +22,8 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/workspaces", workspaceRoutes)
 app.use("/api/boards", boardRoutes)
+app.use("/api/lists", listRoutes)
+app.use("/api/tasks", taskRoutes )
 
 
 mongoose
