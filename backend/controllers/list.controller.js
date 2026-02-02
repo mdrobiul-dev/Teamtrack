@@ -15,9 +15,14 @@ const createList = async (req, res) => {
       return res.status(403).json({ message: "Access denied" });
     }
 
+    const lastList = await List.findOne({ board: boardId }).sort("-order");
+
+    const newOrder = lastList ? lastList.order + 1 : 1;
+
     const list = new List({
       title,
       board: boardId,
+      order: newOrder,
     });
 
     await list.save();
@@ -33,7 +38,7 @@ const getListsByBoard = async (req, res) => {
   try {
     const { boardId } = req.params;
 
-    const board = await Board.findById(boardId).populate("Workspace");
+    const board = await Board.findById(boardId).populate("workspace");
 
     if (!board || !board.workspace.members.includes(req.user.id)) {
       return res.status(400).json({ message: "Access denied" });

@@ -10,4 +10,4 @@ const router = express.Router();
 router.post("/", protected, createTask);
 router.get("/list/:listId", protected, getTasksByList);
 
-module.exports = router;
+module.exports = router; 

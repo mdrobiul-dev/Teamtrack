@@ -42,14 +42,17 @@ const getTasksByList = async (req, res) => {
       populate: { path: "workspace" },
     });
 
-    if (!list || !list.board.workspace.members.include(req.user.id)) {
+    if (!list || !list.board.workspace.members.includes(req.user.id)) {
       return res.status(403).json({ message: "Access denied" });
     }
 
     const tasks = await Task.find({ list: listId }).sort("order");
 
     res.json(tasks);
-  } catch (error) {}
+  } catch (error) {
+     console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 module.exports = { createTask, getTasksByList };
