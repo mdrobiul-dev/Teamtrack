@@ -67,9 +67,9 @@ const reorderLists = async (req, res) => {
     await List.bulkWrite(bulkOps);
     res.status(200).json({ message: "Lists reordered successfully" });
   } catch (error) {
-     console.error(error);
+    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-module.exports = { createList, getListsByBoard, reorderLists};
+module.exports = { createList, getListsByBoard, reorderLists };
