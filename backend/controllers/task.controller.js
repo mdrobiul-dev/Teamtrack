@@ -60,4 +60,26 @@ const getTasksByList = async (req, res) => {
   }
 };
 
-module.exports = { createTask, getTasksByList };
+const reorderTasks = async (req, res) => {
+  try {
+    const { items } = req.body;
+
+    const bulkOps = items.map((item) => ({
+      updateOne: {
+        filter: { _id: item.id },
+        update: { order: item.order },
+      },
+    }));
+
+    await Task.bulkWrite(bulkOps);
+
+    res.status(200).json({
+      message: "Tasks reordered successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { createTask, getTasksByList, reorderTasks };
