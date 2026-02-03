@@ -53,4 +53,23 @@ const getListsByBoard = async (req, res) => {
   }
 };
 
-module.exports = { createList, getListsByBoard };
+const reorderLists = async (req, res) => {
+  try {
+    const { items } = req.body;
+
+    const bulkOps = items.map((item) => ({
+      updateOne: {
+        filter: { _id: item.id },
+        update: { order: item.order },
+      },
+    }));
+
+    await List.bulkWrite(bulkOps);
+    res.status(200).json({ message: "Lists reordered successfully" });
+  } catch (error) {
+     console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { createList, getListsByBoard, reorderLists};

@@ -18,10 +18,15 @@ const createTask = async (req, res) => {
       return res.status(403).json({ message: "Access denied" });
     }
 
+    const lastTask = await List.findOne({ list: listId }).sort("-order");
+
+    const newOrder = lastTask ? lastTask.order + 1 : 1;
+
     const task = new Task({
       title,
       description,
       list: listId,
+      order: newOrder,
     });
 
     await task.save();
@@ -50,7 +55,7 @@ const getTasksByList = async (req, res) => {
 
     res.json(tasks);
   } catch (error) {
-     console.error(error);
+    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
