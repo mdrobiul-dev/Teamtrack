@@ -9,7 +9,7 @@ const protected = require("../middlewear/auth.middleware");
 const router = express.Router();
 
 router.post("/", protected, createTask);
-router.put("/reorder", protected, reorderTasks)
+router.put("/reorder", protected, reorderTasks);
 router.get("/list/:listId", protected, getTasksByList);
 
-module.exports = router; 
+module.exports = router;

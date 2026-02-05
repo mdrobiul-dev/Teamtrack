@@ -9,7 +9,7 @@ const {
 const router = express.Router();
 
 router.post("/", protected, createList);
-router.put("reorder", protected, reorderLists)
+router.put("/reorder", protected, reorderLists)
 router.get("/board/:boardId", protected, getListsByBoard);
 
 module.exports = router;
