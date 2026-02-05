@@ -72,4 +72,4 @@ const reorderLists = async (req, res) => {
   }
 };
 
-module.exports = { createList, getListsByBoard, reorderLists };     
+module.exports = { createList, getListsByBoard, reorderLists };         
