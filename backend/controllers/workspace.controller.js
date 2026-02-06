@@ -11,7 +11,12 @@ const createWorkspace = async (req, res) => {
     const workspace = new Workspace({
       name,
       owner: req.user.id,
-      members: [req.user.id],
+      members: [
+        {
+          user: req.user.id,
+          role: "admin",
+        },
+      ],
     });
     await workspace.save();
 

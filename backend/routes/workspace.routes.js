@@ -5,6 +5,7 @@ const { createWorkspace, getMyWorkspaces } = require("../controllers/workspace.c
 const router = express.Router();
 
 router.post("/", protected, createWorkspace);
+// router.post("/workspaces/:workspaceId/members")
 router.get("/", protected, getMyWorkspaces);
 
 module.exports = router
