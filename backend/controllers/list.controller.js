@@ -36,7 +36,7 @@ const createList = async (req, res) => {
       workspace: board.workspace._id,
     });
 
-    await activity.save()
+    await activity.save();
 
     res.status(201).json(list);
   } catch (error) {
