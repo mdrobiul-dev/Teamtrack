@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post("/", protected, createTask);
 router.put("/reorder", protected, reorderTasks);
-router.put("/move", protected, moveTask)
+router.put("/move", protected, moveTask);
 router.get("/list/:listId", protected, getTasksByList);
 
 module.exports = router;
