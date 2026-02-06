@@ -82,4 +82,34 @@ const reorderTasks = async (req, res) => {
   }
 };
 
-module.exports = { createTask, getTasksByList, reorderTasks };
+const moveTask = async (req, res) => {
+  try {
+    const { taskId, targetListId } = req.body;
+
+    if (!taskId || !targetListId) {
+      return res.status(400).json({ message: "Missing fields" });
+    }
+
+    const task = await Task.findById(taskId);
+
+    if (!task) {
+      return res.status(400).json({ message: "Task not found" });
+    }
+
+    const lastTask = await Task.findOne({ list: targetListId }).sort("-order");
+
+    const newOrder = lastTask ? lastTask.order + 1 : 1;
+
+    task.list = targetListId;
+    task.order = newOrder;
+
+    await task.save();
+
+    res.status(200).json({ message: "Task moved successfully", task });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { createTask, getTasksByList, reorderTasks, moveTask };
