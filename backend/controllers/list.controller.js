@@ -1,3 +1,4 @@
+const Activity = require("../models/Activity");
 const Board = require("../models/Board");
 const List = require("../models/List");
 
@@ -26,6 +27,16 @@ const createList = async (req, res) => {
     });
 
     await list.save();
+
+    const activity = new Activity({
+      user: req.user.id,
+      action: "A list has been created",
+      entityType: "list",
+      entityId: list._id,
+      workspace: board.workspace._id,
+    });
+
+    await activity.save()
 
     res.status(201).json(list);
   } catch (error) {
@@ -72,4 +83,4 @@ const reorderLists = async (req, res) => {
   }
 };
 
-module.exports = { createList, getListsByBoard, reorderLists };                   
+module.exports = { createList, getListsByBoard, reorderLists };

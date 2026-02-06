@@ -1,3 +1,4 @@
+const Activity = require("../models/Activity");
 const List = require("../models/List");
 const Task = require("../models/Task");
 
@@ -30,6 +31,16 @@ const createTask = async (req, res) => {
     });
 
     await task.save();
+
+    const activity = new Activity({
+      user: req.user.id,
+      action: "A task has been created",
+      entityType: "task",
+      entityId: task._id,
+      workspace: list.board.workspace._id,
+    });
+
+    await activity.save();
 
     res.status(201).json(task);
   } catch (error) {
@@ -82,6 +93,7 @@ const reorderTasks = async (req, res) => {
   }
 };
 
+
 const moveTask = async (req, res) => {
   try {
     const { taskId, targetListId } = req.body;
@@ -90,14 +102,21 @@ const moveTask = async (req, res) => {
       return res.status(400).json({ message: "Missing fields" });
     }
 
-    const task = await Task.findById(taskId);
+    const task = await Task.findById(taskId).populate({
+      path: "list",
+      populate: {
+        path: "board",
+        populate: { path: "workspace" },
+      },
+    });
 
     if (!task) {
       return res.status(400).json({ message: "Task not found" });
     }
 
-    const lastTask = await Task.findOne({ list: targetListId }).sort("-order");
+    const workspaceId = task.list.board.workspace._id;
 
+    const lastTask = await Task.findOne({ list: targetListId }).sort("-order");
     const newOrder = lastTask ? lastTask.order + 1 : 1;
 
     task.list = targetListId;
@@ -105,11 +124,20 @@ const moveTask = async (req, res) => {
 
     await task.save();
 
+    await Activity.create({
+      user: req.user.id,
+      action: "A task has been moved",
+      entityType: "task",
+      entityId: task._id,
+      workspace: workspaceId,
+    });
+
     res.status(200).json({ message: "Task moved successfully", task });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 module.exports = { createTask, getTasksByList, reorderTasks, moveTask };

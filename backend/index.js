@@ -9,6 +9,7 @@ const workspaceRoutes  = require("./routes/workspace.routes")
 const boardRoutes  = require("./routes/board.routes")
 const listRoutes = require("./routes/list.routes")
 const taskRoutes  = require("./routes/task.routes")
+const activityRoutes = require("./routes/activity.routes")
 
 
 const app = express();
@@ -24,6 +25,7 @@ app.use("/api/workspaces", workspaceRoutes)
 app.use("/api/boards", boardRoutes)
 app.use("/api/lists", listRoutes)
 app.use("/api/tasks", taskRoutes )
+app.use("/api/activity", activityRoutes)
 
 
 mongoose
