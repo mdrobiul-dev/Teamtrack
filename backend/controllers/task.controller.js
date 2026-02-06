@@ -93,7 +93,6 @@ const reorderTasks = async (req, res) => {
   }
 };
 
-
 const moveTask = async (req, res) => {
   try {
     const { taskId, targetListId } = req.body;
@@ -138,6 +137,5 @@ const moveTask = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
 
 module.exports = { createTask, getTasksByList, reorderTasks, moveTask };
