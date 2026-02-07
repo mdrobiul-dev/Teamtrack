@@ -138,4 +138,12 @@ const moveTask = async (req, res) => {
   }
 };
 
+const assignTask  = async (req, res) => {
+    try {
+      const 
+    } catch (error) {
+      
+    }
+}
+
 module.exports = { createTask, getTasksByList, reorderTasks, moveTask };

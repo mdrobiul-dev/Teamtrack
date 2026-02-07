@@ -1,3 +1,4 @@
+const Activity = require("../models/Activity");
 const Board = require("../models/Board");
 const Workspace = require("../models/Workspace");
 
@@ -11,7 +12,6 @@ const createBoard = async (req, res) => {
 
     const workspace = await Workspace.findOne({
       _id: workspaceId,
-      members: req.user.id,
     });
 
     if (!workspace) {
@@ -21,9 +21,20 @@ const createBoard = async (req, res) => {
     const board = new Board({
       title,
       workspace: workspaceId,
+      createdby: req.user.id,
     });
 
     await board.save();
+
+    const activity = new Activity({
+      user: req.user.id,
+      action: "A Board has been created",
+      entityType: "board",
+      entityId: board._id,
+      workspace: workspace._id,
+    });
+
+    await activity.save();
 
     res.status(201).json(board);
   } catch (error) {

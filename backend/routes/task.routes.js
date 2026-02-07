@@ -10,6 +10,7 @@ const protected = require("../middlewear/auth.middleware");
 const router = express.Router();
 
 router.post("/", protected, createTask);
+// PUT /api/tasks/:taskId/assign
 router.put("/reorder", protected, reorderTasks);
 router.put("/move", protected, moveTask);
 router.get("/list/:listId", protected, getTasksByList);
