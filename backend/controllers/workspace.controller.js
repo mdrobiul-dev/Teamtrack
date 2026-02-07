@@ -41,4 +41,17 @@ const getMyWorkspaces = async (req, res) => {
   }
 };
 
+const addMember = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const { workspaceId } = req.params;
+
+    const workspace = await Workspace.findById(workspaceId);
+
+    if(!workspace) {
+      return res.status(400).json({ message: "Workspace not found" })
+    }
+  } catch (error) {}
+};
+
 module.exports = { createWorkspace, getMyWorkspaces };
