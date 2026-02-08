@@ -15,11 +15,17 @@ const createTask = async (req, res) => {
       populate: { path: "workspace" },
     });
 
-    if (!list || !list.board.workspace.members.includes(req.user.id)) {
-      return res.status(403).json({ message: "Access denied" });
+    if(!list) {
+      return res.status(404).json({message : "list not found"})
     }
 
-    const lastTask = await List.findOne({ list: listId }).sort("-order");
+    const isMember = list.board?.workspace?.members.some((m) => m.user?.toString() === req.user.id) 
+
+    if (!isMember) {
+      return res.status(401).json({message : "Not authorized member"})
+    }
+
+    const lastTask = await Task.findOne({ list: listId }).sort("-order");
 
     const newOrder = lastTask ? lastTask.order + 1 : 1;
 
@@ -58,7 +64,11 @@ const getTasksByList = async (req, res) => {
       populate: { path: "workspace" },
     });
 
-    if (!list || !list.board.workspace.members.includes(req.user.id)) {
+    const isMember = list.board.workspace.members.some(
+      (m) => m.user.toString() === req.user.id,
+    );
+
+    if (!isMember) {
       return res.status(403).json({ message: "Access denied" });
     }
 
@@ -95,7 +105,8 @@ const reorderTasks = async (req, res) => {
 
 const moveTask = async (req, res) => {
   try {
-    const { taskId, targetListId } = req.body;
+    const { taskId } = req.params;
+    const { targetListId } = req.body;
 
     if (!taskId || !targetListId) {
       return res.status(400).json({ message: "Missing fields" });
@@ -113,7 +124,17 @@ const moveTask = async (req, res) => {
       return res.status(400).json({ message: "Task not found" });
     }
 
+    const workspace = task.list.board.workspace;
     const workspaceId = task.list.board.workspace._id;
+
+    const isAdmin = workspace.owner.toString() === req.user.id;
+
+    const isAssignee =
+      task.assignedTo && task.assignedTo.toString() === req.user.id;
+
+    if (!isAdmin && !isAssignee) {
+      return res.status(403).json({ message: "Access denied" });
+    }
 
     const lastTask = await Task.findOne({ list: targetListId }).sort("-order");
     const newOrder = lastTask ? lastTask.order + 1 : 1;
@@ -138,11 +159,75 @@ const moveTask = async (req, res) => {
   }
 };
 
-const assignTask  = async (req, res) => {
-    try {
-    } catch (error) {
-      
-    }
-}
+const assignTask = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    const { userId } = req.body;
 
-module.exports = { createTask, getTasksByList, reorderTasks, moveTask };
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    const task = await Task.findById(taskId).populate({
+      path: "list",
+      populate: { path: "board", populate: { path: "workspace" } },
+    });
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    const workspace = task.list?.board?.workspace;
+
+    if (!workspace) {
+      return res.status(400).json({ message: "Invalid task hierarchy" });
+    }
+
+    if (workspace.owner?.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const isMember = workspace.members?.some(
+      (m) => m.user?.toString() === userId,
+    );
+
+    if (!isMember) {
+      return res
+        .status(400)
+        .json({ message: "User is not a workspace member" });
+    }
+
+    if (task.assignedTo?.toString() === userId) {
+      return res.status(400).json({
+        message: "Task is already assigned to this user",
+      });
+    }
+
+    task.assignedTo = userId;
+    await task.save();
+
+    await Activity.create({
+      user: req.user.id,
+      action: "assigned a task",
+      entityType: "task",
+      entityId: task._id,
+      workspace: workspace._id,
+    });
+
+    res.json({
+      message: "Task assigned successfully",
+      task,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = {
+  createTask,
+  getTasksByList,
+  reorderTasks,
+  moveTask,
+  assignTask,
+};
