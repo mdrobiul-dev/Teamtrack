@@ -12,7 +12,6 @@ const requireWorkspaceAdmin = require("../middlewear/workspaceRole.middleware");
 const router = express.Router();
 
 router.post("/", protected, createTask);
-// PUT /api/tasks/:taskId/assign
 router.put("/:taskId/assign", protected, assignTask);
 router.put("/reorder", protected, reorderTasks);
 router.put("/:taskId/move", protected, moveTask);
