@@ -1,3 +1,4 @@
+const { checkWorkspaceAccess } = require("../helpers/checkWorkspaceAccess ");
 const Activity = require("../models/Activity");
 const List = require("../models/List");
 const Task = require("../models/Task");
@@ -15,16 +16,19 @@ const createTask = async (req, res) => {
       populate: { path: "workspace" },
     });
 
-    if (!list) {
-      return res.status(404).json({ message: "list not found" });
+    if (!list || !list.board || list.board.workspace) {
+      return res
+        .status(404)
+        .json({ message: "List, board, or workspace not found" });
     }
 
-    const isMember = list.board?.workspace?.members.some(
-      (m) => m.user?.toString() === req.user.id,
+    const { access } = await checkWorkspaceAccess(
+      list.board.workspace._id,
+      req.user.id,
     );
 
-    if (!isMember) {
-      return res.status(401).json({ message: "Not authorized member" });
+    if (!access) {
+      return res.status(403).json({ message: "Access denied" });
     }
 
     const lastTask = await Task.findOne({ list: listId }).sort("-order");
@@ -32,8 +36,8 @@ const createTask = async (req, res) => {
     const newOrder = lastTask ? lastTask.order + 1 : 1;
 
     const task = new Task({
-      title,
-      description,
+      title: title.trim(),
+      description: description?.trim(),
       list: listId,
       order: newOrder,
     });
@@ -66,11 +70,12 @@ const getTasksByList = async (req, res) => {
       populate: { path: "workspace" },
     });
 
-    const isMember = list.board.workspace.members.some(
-      (m) => m.user.toString() === req.user.id,
+    const { access } = await checkWorkspaceAccess(
+      list.board.workspace._id,
+      req.user.id,
     );
 
-    if (!isMember) {
+    if (!access) {
       return res.status(403).json({ message: "Access denied" });
     }
 
