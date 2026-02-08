@@ -15,14 +15,16 @@ const createTask = async (req, res) => {
       populate: { path: "workspace" },
     });
 
-    if(!list) {
-      return res.status(404).json({message : "list not found"})
+    if (!list) {
+      return res.status(404).json({ message: "list not found" });
     }
 
-    const isMember = list.board?.workspace?.members.some((m) => m.user?.toString() === req.user.id) 
+    const isMember = list.board?.workspace?.members.some(
+      (m) => m.user?.toString() === req.user.id,
+    );
 
     if (!isMember) {
-      return res.status(401).json({message : "Not authorized member"})
+      return res.status(401).json({ message: "Not authorized member" });
     }
 
     const lastTask = await Task.findOne({ list: listId }).sort("-order");
