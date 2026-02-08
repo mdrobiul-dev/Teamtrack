@@ -7,7 +7,6 @@ const {
   assignTask,
 } = require("../controllers/task.controller");
 const protected = require("../middlewear/auth.middleware");
-const requireWorkspaceAdmin = require("../middlewear/workspaceRole.middleware");
 
 const router = express.Router();
 
