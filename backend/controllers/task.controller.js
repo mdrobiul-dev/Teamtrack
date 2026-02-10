@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const { checkWorkspaceAccess } = require("../helpers/checkWorkspaceAccess ");
 const Activity = require("../models/Activity");
 const List = require("../models/List");
@@ -16,7 +17,7 @@ const createTask = async (req, res) => {
       populate: { path: "workspace" },
     });
 
-    if (!list || !list.board || list.board.workspace) {
+    if (!list || !list.board || !list.board.workspace) {
       return res
         .status(404)
         .json({ message: "List, board, or workspace not found" });
@@ -69,6 +70,10 @@ const getTasksByList = async (req, res) => {
       path: "board",
       populate: { path: "workspace" },
     });
+
+    if (!list || !list.board || !list.board.workspace) {
+      return res.status(404).json({ message: "List not found" });
+    }
 
     const { access } = await checkWorkspaceAccess(
       list.board.workspace._id,
@@ -303,10 +308,159 @@ const assignTask = async (req, res) => {
   }
 };
 
+const deleteTask = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(taskId)) {
+      return res.status(400).json({ message: "Invalid ID format" });
+    }
+
+    const task = await Task.findById(taskId).populate({
+      path: "list",
+      populate: { path: "board", populate: { path: "workspace" } },
+    });
+
+    if (!task || !task.list || !task.list.board || !task.list.board.workspace) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    const workspaceId = task.list.board.workspace._id;
+
+    const { access } = await checkWorkspaceAccess(workspaceId, req.user.id);
+
+    if (!access) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    await Task.findByIdAndDelete(taskId);
+
+    await Task.updateMany(
+      { list: task.list._id, order: { $gt: task.order } },
+      { $inc: { order: -1 } },
+    );
+
+    await Activity.create({
+      user: req.user.id,
+      action: "A task has been deleted",
+      entityType: "task",
+      entityId: task._id,
+      workspace: workspaceId,
+    });
+    res.json({ message: "Task deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+const unassignTask = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(taskId)) {
+      return res.status(400).json({ message: "Invalid ID format" });
+    }
+
+    const task = await Task.findById(taskId).populate({
+      path: "list",
+      populate: { path: "board", populate: { path: "workspace" } },
+    });
+
+    if (!task || !task.list?.board?.workspace) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    const workspace = task.list.board.workspace;
+
+    const { isAdmin } = await checkWorkspaceAccess(
+      workspace._id,
+      req.user.id,
+    );
+
+    if (!isAdmin) {
+      return res.status(403).json({
+        message: "Only workspace admins can unassign tasks",
+      });
+    }
+
+    if (!task.assignedTo) {
+      return res.status(400).json({
+        message: "Task is not assigned to anyone",
+      });
+    }
+
+    task.assignedTo = null;
+    await task.save();
+
+    await Activity.create({
+      user: req.user.id,
+      action: "unassigned a task",
+      entityType: "task",
+      entityId: task._id,
+      workspace: workspace._id,
+    });
+
+    res.json({
+      message: "Task unassigned successfully",
+      task,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getTaskById = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(taskId)) {
+      return res.status(400).json({ message: "Invalid ID format" });
+    }
+
+    const task = await Task.findById(taskId)
+      .populate("assignedTo", "name email")
+      .populate({
+        path: "list",
+        populate: {
+          path: "board",
+          populate: { path: "workspace" },
+        },
+      });
+
+    if (!task || !task.list?.board?.workspace) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    const workspaceId = task.list.board.workspace._id;
+
+    const { access } = await checkWorkspaceAccess(
+      workspaceId,
+      req.user.id,
+    );
+
+    if (!access) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    res.json(task);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
 module.exports = {
   createTask,
   getTasksByList,
   reorderTasks,
   moveTask,
   assignTask,
+  deleteTask,
+  unassignTask,
+  getTaskById
 };
