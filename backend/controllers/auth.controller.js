@@ -8,7 +8,6 @@ const sanitizeInput = (input) => {
   return input.trim().replace(/[<>]/g, "");
 };
 
-
 const generateAccessToken = (user) => {
   return jwt.sign(
     {
@@ -21,15 +20,11 @@ const generateAccessToken = (user) => {
   );
 };
 
-
 const generateRefreshToken = (user) => {
-  return jwt.sign(
-    { id: user._id },
-    process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: "7d" }, 
-  );
+  return jwt.sign({ id: user._id }, process.env.REFRESH_TOKEN_SECRET, {
+    expiresIn: "7d",
+  });
 };
-
 
 const registerUser = async (req, res) => {
   try {
@@ -38,7 +33,6 @@ const registerUser = async (req, res) => {
     name = sanitizeInput(name);
     email = sanitizeInput(email)?.toLowerCase();
 
-    
     if (!name || !email || !password) {
       return res.status(400).json({
         success: false,
@@ -88,7 +82,6 @@ const registerUser = async (req, res) => {
 
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
-
 
     user.refreshToken = refreshToken;
     user.refreshTokenIssuedAt = new Date();
@@ -150,7 +143,6 @@ const loginUser = async (req, res) => {
       });
     }
 
-
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
@@ -211,12 +203,9 @@ const refreshAccessToken = async (req, res) => {
       });
     }
 
-  
     const newAccessToken = generateAccessToken(user);
 
-   
     const newRefreshToken = generateRefreshToken(user);
-
 
     user.refreshToken = newRefreshToken;
     user.refreshTokenIssuedAt = new Date();
@@ -225,7 +214,7 @@ const refreshAccessToken = async (req, res) => {
     res.status(200).json({
       success: true,
       accessToken: newAccessToken,
-      refreshToken: newRefreshToken, 
+      refreshToken: newRefreshToken,
     });
   } catch (error) {
     console.error("Refresh token error:", error);
@@ -236,10 +225,8 @@ const refreshAccessToken = async (req, res) => {
   }
 };
 
-
 const logoutUser = async (req, res) => {
   try {
-   
     await User.findByIdAndUpdate(req.user.id, {
       $unset: { refreshToken: 1, refreshTokenIssuedAt: 1 },
     });
@@ -294,4 +281,4 @@ module.exports = {
   refreshAccessToken,
   logoutUser,
   getMe,
-};                  
+};
