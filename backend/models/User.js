@@ -18,6 +18,14 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 6,
     },
+    refreshToken: {
+      type: String,
+      select: false,
+    },
+    refreshTokenIssuedAt: {
+      type: Date,
+      select: false,
+    },
   },
 
   {
