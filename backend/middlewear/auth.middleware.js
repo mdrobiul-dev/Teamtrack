@@ -22,4 +22,4 @@ const protected = (req, res, next) => {
   }
 };
 
-module.exports = protected;   
+module.exports = protected;         
