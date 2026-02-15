@@ -107,9 +107,7 @@ const registerUser = async (req, res) => {
   }
 };
 
-// @desc    Login user
-// @route   POST /api/auth/login
-// @access  Public
+
 const loginUser = async (req, res) => {
   try {
     let { email, password } = req.body;
