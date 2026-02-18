@@ -16,4 +16,4 @@ const getWorkspaceActivity = async (req, res) => {
   }
 };
 
-module.exports = { getWorkspaceActivity };               
+module.exports = { getWorkspaceActivity };                       
