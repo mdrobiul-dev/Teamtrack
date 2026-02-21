@@ -27,8 +27,6 @@ async function apiFetch<T>(
     credentials: 'include', // if backend sets cookies too (rare)
   });
 
-  // We no longer handle 401 here — proxy will refresh on next request
-  // If you want immediate retry, you can add it, but proxy is cleaner
 
   if (!res.ok) {
     const errorData = await res.json().catch(() => ({}));
