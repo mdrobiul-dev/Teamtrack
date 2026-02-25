@@ -47,4 +47,4 @@ export const api = {
   put: <T>(path: string, body?: unknown, opts?: RequestInit) =>
     apiFetch<T>(path, { method: 'PUT', body: body ? JSON.stringify(body) : undefined, ...opts }),
   delete: <T>(path: string, opts?: RequestInit) => apiFetch<T>(path, { method: 'DELETE', ...opts }),
-};          
+};                     
