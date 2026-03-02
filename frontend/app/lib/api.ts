@@ -56,5 +56,5 @@ export const api = {
     }),
   delete: <T>(path: string, opts?: RequestInit) =>
     apiFetch<T>(path, { method: "DELETE", ...opts }),
-};               
+};                      
           
