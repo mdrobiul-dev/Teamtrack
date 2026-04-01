@@ -1,7 +1,8 @@
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const { validateEmail } = require("../helpers/validateEmail ");
+const { validateEmail } = require("../helpers/validateEmail");
 
 const sanitizeInput = (input) => {
   if (!input) return input;
@@ -24,6 +25,10 @@ const generateRefreshToken = (user) => {
   return jwt.sign({ id: user._id }, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn: "7d",
   });
+};
+
+const hashRefreshToken = (token) => {
+  return crypto.createHash("sha256").update(token).digest("hex");
 };
 
 const registerUser = async (req, res) => {
@@ -83,7 +88,7 @@ const registerUser = async (req, res) => {
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    user.refreshToken = refreshToken;
+    user.refreshTokenHash = hashRefreshToken(refreshToken);
     user.refreshTokenIssuedAt = new Date();
     await user.save();
 
@@ -122,7 +127,7 @@ const loginUser = async (req, res) => {
     }
 
     const user = await User.findOne({ email }).select(
-      "+refreshToken +refreshTokenIssuedAt",
+      "+password +refreshTokenHash +refreshTokenIssuedAt",
     );
 
     if (!user) {
@@ -144,7 +149,7 @@ const loginUser = async (req, res) => {
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    user.refreshToken = refreshToken;
+    user.refreshTokenHash = hashRefreshToken(refreshToken);
     user.refreshTokenIssuedAt = new Date();
     await user.save();
 
@@ -191,8 +196,8 @@ const refreshAccessToken = async (req, res) => {
 
     const user = await User.findOne({
       _id: decoded.id,
-      refreshToken: refreshToken,
-    }).select("+refreshToken");
+      refreshTokenHash: hashRefreshToken(refreshToken),
+    }).select("+refreshTokenHash");
 
     if (!user) {
       return res.status(401).json({
@@ -205,7 +210,7 @@ const refreshAccessToken = async (req, res) => {
 
     const newRefreshToken = generateRefreshToken(user);
 
-    user.refreshToken = newRefreshToken;
+    user.refreshTokenHash = hashRefreshToken(newRefreshToken);
     user.refreshTokenIssuedAt = new Date();
     await user.save();
 
@@ -226,7 +231,7 @@ const refreshAccessToken = async (req, res) => {
 const logoutUser = async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.user.id, {
-      $unset: { refreshToken: 1, refreshTokenIssuedAt: 1 },
+      $unset: { refreshTokenHash: 1, refreshTokenIssuedAt: 1 },
     });
 
     res.status(200).json({
@@ -245,7 +250,7 @@ const logoutUser = async (req, res) => {
 const getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select(
-      "-password -refreshToken",
+      "-password -refreshTokenHash",
     );
 
     if (!user) {

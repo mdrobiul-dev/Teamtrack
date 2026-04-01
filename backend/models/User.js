@@ -17,8 +17,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 6,
+      select: false,
     },
-    refreshToken: {
+    refreshTokenHash: {
       type: String,
       select: false,
     },

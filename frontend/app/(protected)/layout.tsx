@@ -1,5 +1,4 @@
-import { redirect } from 'next/navigation';
-import { getSession } from '@/app/actions/auth.actions'; // or '@/app/lib/auth'
+import { requireAuth } from '@/app/lib/auth';
 import { DashboardLayout } from '@/app/components/layout/dashboard-layout';
 
 export default async function ProtectedLayout({
@@ -7,11 +6,7 @@ export default async function ProtectedLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getSession();
-
-  if (!session) {
-    redirect('/login');
-  }
+  const session = await requireAuth();
 
   return <DashboardLayout user={session}>{children}</DashboardLayout>;
 }

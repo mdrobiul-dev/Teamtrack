@@ -50,12 +50,6 @@ async function setAuthCookies(response: { accessToken: string; refreshToken: str
     httpOnly: true,
     maxAge: 7 * 24 * 60 * 60, // 7 days
   });
-
-  cookieStore.set('user', JSON.stringify(response.user), {
-    ...commonOptions,
-    httpOnly: false,
-    maxAge: 7 * 24 * 60 * 60,
-  });
 }
 
 // ── Actions ───────────────────────────────────────────────────────────────────
@@ -135,23 +129,8 @@ export async function logout(): Promise<never> {
     const cookieStore = await cookies(); // safe even if previous failed
     cookieStore.delete('accessToken');
     cookieStore.delete('refreshToken');
-    cookieStore.delete('user');
 
     revalidatePath('/');
     redirect('/login');
-  }
-}
-
-export async function getSession(): Promise<User | null> {
-  const cookieStore = await cookies();
-  const userCookie = cookieStore.get('user')?.value;
-
-  if (!userCookie) return null;
-
-  try {
-    return JSON.parse(userCookie) as User;
-  } catch {
-    console.warn('Invalid user cookie format');
-    return null;
   }
 }

@@ -1,36 +1,23 @@
-// app/lib/auth.ts
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 import { cache } from 'react';
+import { redirect } from 'next/navigation';
+import type { User } from '@/app/types/auth';
+import { authService } from '@/app/services/auth.service';
 
-export interface SessionUser {
-  id: string;
-  name: string;
-  email: string;
-  createdAt?: string;
-}
-
-export const getSession = cache(async (): Promise<SessionUser | null> => {
-  const cookieStore = await cookies(); // ← async!
-  const userCookie = cookieStore.get('user');
-
-  if (!userCookie?.value) return null;
-
+export const getSession = cache(async (): Promise<User | null> => {
   try {
-    return JSON.parse(userCookie.value) as SessionUser;
+    const res = await authService.getMe();
+    return res.user;
   } catch {
-    console.error('Invalid user cookie');
     return null;
   }
 });
 
-export const requireAuth = cache(async (): Promise<SessionUser> => {
+export const requireAuth = cache(async (): Promise<User> => {
   const session = await getSession();
   if (!session) redirect('/login');
   return session;
 });
 
-// ... keep the other functions, but make them async where they use cookies()
 export const getTokens = cache(async () => {
   const cookieStore = await cookies();
   return {

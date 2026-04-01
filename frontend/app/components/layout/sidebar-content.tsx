@@ -10,7 +10,8 @@ import {
   Settings,
   LogOut
 } from 'lucide-react';
-import { useAuth } from '@/app/hooks/use-auth';
+import { useTransition } from 'react';
+import { logout } from '@/app/actions/auth.actions';
 import { Button } from '@/app/components/ui/button';
 import { cn } from '@/app/lib/utils';
 
@@ -32,7 +33,7 @@ const navigation = [
 
 export function SidebarContent({ user }: SidebarContentProps) {
   const pathname = usePathname();
-  const { logout } = useAuth(); // Still use hook for logout function
+  const [isPending, startTransition] = useTransition();
 
   return (
     <div className="flex flex-col h-full bg-card border-r">
@@ -85,11 +86,12 @@ export function SidebarContent({ user }: SidebarContentProps) {
         <Button 
           variant="ghost" 
           size="sm" 
-          onClick={logout}
+          onClick={() => startTransition(async () => logout())}
+          disabled={isPending}
           className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
         >
           <LogOut className="h-4 w-4 mr-2" />
-          Sign Out
+          {isPending ? 'Signing out...' : 'Sign Out'}
         </Button>
       </div>
     </div>

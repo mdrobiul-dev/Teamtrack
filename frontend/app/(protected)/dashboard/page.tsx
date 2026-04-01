@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
-import { getSession } from '@/app/actions/auth.actions'; // or lib/auth
+import { requireAuth } from '@/app/lib/auth';
 import { DashboardClient } from '@/app/components/dashboard/dashboard-client';
 
 export const metadata: Metadata = {
@@ -10,11 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
-  const session = await getSession();
-
-  if (!session) {
-    redirect('/login');
-  }
+  const session = await requireAuth();
 
   return (
     <div className="container mx-auto p-4 md:p-6 lg:p-8">

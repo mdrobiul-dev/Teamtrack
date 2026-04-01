@@ -1,7 +1,7 @@
 const express = require("express");
 const { registerUser, loginUser, refreshAccessToken, getMe, logoutUser } = require("../controllers/auth.controller");
 const protected = require("../middlewear/auth.middleware");
-const { authLimiter } = require("../middlewear/authLimiter ");
+const { authLimiter } = require("../middlewear/authLimiter");
 
 const router = express.Router();
 

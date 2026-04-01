@@ -10,8 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/app/components/ui/card';
-import { useAuth } from '@/app/hooks/use-auth';
 import type { User } from '@/app/types/auth';
+import { logout } from '@/app/actions/auth.actions';
 
 interface DashboardClientProps {
   user: User;
@@ -26,7 +26,6 @@ interface DashboardClientProps {
 
 export function DashboardClient({ user, stats }: DashboardClientProps) {
   const router = useRouter();
-  const { logout } = useAuth();
   const [isPending, startTransition] = useTransition();
 
   const handleLogout = () => {

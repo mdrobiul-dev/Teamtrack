@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { LoginForm } from "@/app/components/auth/login-form";
-import { getSession } from "@/app/actions/auth.actions"; // or '@/app/lib/auth' if you moved it
+import { getSession } from "@/app/lib/auth";
 
 export const metadata: Metadata = {
   title: "Login | TaskFlow",
