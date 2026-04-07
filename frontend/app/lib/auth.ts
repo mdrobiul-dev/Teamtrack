@@ -18,15 +18,3 @@ export const requireAuth = cache(async (): Promise<User> => {
   return session;
 });
 
-export const getTokens = cache(async () => {
-  const cookieStore = await cookies();
-  return {
-    accessToken: cookieStore.get('accessToken')?.value,
-    refreshToken: cookieStore.get('refreshToken')?.value,
-  };
-});
-
-export const isAuthenticated = cache(async () => {
-  return !!(await getSession());
-});
-

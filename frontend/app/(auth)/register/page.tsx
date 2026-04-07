@@ -4,7 +4,7 @@ import { RegisterForm } from '@/app/components/auth/register-form';
 import { getSession } from '@/app/lib/auth';
 
 export const metadata: Metadata = {
-  title: 'Register | TaskFlow',
+  title: 'Register',
   description: 'Create a new TaskFlow account',
 };
 

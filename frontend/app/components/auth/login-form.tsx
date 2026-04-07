@@ -17,7 +17,6 @@ import {
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 
 export function LoginForm() {
-  // Modern: useActionState from 'react' (replaces useFormState)
   const [state, formAction, isPending] = useActionState(login, {
     success: false,
     error: undefined,
@@ -28,7 +27,6 @@ export function LoginForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
 
-  // Handle success: reset form + redirect (in useEffect, not during render)
   useEffect(() => {
     if (state.success && formRef.current) {
       formRef.current.reset();
@@ -78,7 +76,6 @@ export function LoginForm() {
             )}
           </div>
 
-          {/* Password Field with Toggle */}
           <div className="space-y-2">
             <label
               htmlFor="password"

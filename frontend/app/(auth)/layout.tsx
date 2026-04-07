@@ -8,8 +8,6 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
           {children}
         </div>
       </main>
-
-      {/* Optional footer for branding/legal */}
       <footer className="py-6 text-center text-sm text-gray-500">
         © {new Date().getFullYear()} TaskFlow. All rights reserved.
       </footer>
