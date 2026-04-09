@@ -1,4 +1,3 @@
-// app/lib/api.ts
 import "server-only";
 import { cookies } from "next/headers";
 
@@ -24,7 +23,7 @@ async function apiFetch<T>(
   const res = await fetch(`${BACKEND_URL}${path}`, {
     ...options,
     headers,
-    credentials: "include", // if backend sets cookies too (rare)
+    credentials: "include",
   });
 
   if (!res.ok) {
@@ -59,5 +58,4 @@ export const api = {
     }),
   delete: <T>(path: string, opts?: RequestInit) =>
     apiFetch<T>(path, { method: "DELETE", ...opts }),
-};                   
-        
+};
