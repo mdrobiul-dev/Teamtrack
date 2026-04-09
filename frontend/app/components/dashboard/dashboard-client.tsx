@@ -15,7 +15,6 @@ import { logout } from '@/app/actions/auth.actions';
 
 interface DashboardClientProps {
   user: User;
-  // Optional: pass real stats from server later
   stats?: {
     workspaces: number;
     boards: number;
@@ -34,7 +33,6 @@ export function DashboardClient({ user, stats }: DashboardClientProps) {
     });
   };
 
-  // Placeholder stats (replace with real data from server action / API later)
   const defaultStats = stats ?? {
     workspaces: 3,
     boards: 12,
@@ -44,7 +42,6 @@ export function DashboardClient({ user, stats }: DashboardClientProps) {
 
   return (
     <div className="space-y-6 md:space-y-8">
-      {/* Welcome Banner */}
       <div className="bg-linear-to-r from-blue-600 to-indigo-600 rounded-xl p-6 md:p-8 text-white shadow-sm">
         <h2 className="text-2xl md:text-3xl font-semibold mb-2">
           Welcome back, {user.name}! 👋
@@ -54,7 +51,6 @@ export function DashboardClient({ user, stats }: DashboardClientProps) {
         </p>
       </div>
 
-      {/* Stats Grid – more responsive */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <StatCard title="Total Workspaces" value={defaultStats.workspaces} change="+2 from last month" />
         <StatCard title="Active Boards" value={defaultStats.boards} change="4 in progress" />
@@ -62,13 +58,13 @@ export function DashboardClient({ user, stats }: DashboardClientProps) {
         <StatCard title="Team Members" value={defaultStats.members} change="+3 new this month" />
       </div>
 
-      {/* Recent Activity + Tasks – grid layout */}
+      
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <RecentWorkspaces />
         <YourTasks />
       </div>
 
-      {/* Quick Actions */}
+     
       <Card>
         <CardHeader>
           <CardTitle>Quick Actions</CardTitle>
@@ -84,7 +80,7 @@ export function DashboardClient({ user, stats }: DashboardClientProps) {
         </CardContent>
       </Card>
 
-      {/* User Profile Card */}
+   
       <Card className="bg-muted/40">
         <CardContent className="pt-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
@@ -115,7 +111,7 @@ export function DashboardClient({ user, stats }: DashboardClientProps) {
   );
 }
 
-// Reusable Stat Card (extracted for cleanliness)
+
 function StatCard({ title, value, change }: { title: string; value: number; change: string }) {
   return (
     <Card>
@@ -130,7 +126,7 @@ function StatCard({ title, value, change }: { title: string; value: number; chan
   );
 }
 
-// Placeholder components (make dynamic later)
+
 function RecentWorkspaces() {
   const router = useRouter();
   return (

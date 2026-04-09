@@ -1,4 +1,4 @@
-// import { GeistSans, GeistMono } from 'geist/font'; // ← correct import path!
+// import { GeistSans, GeistMono } from 'geist/font'; 
 import "./globals.css";
 
 import { Inter, JetBrains_Mono } from "next/font/google";
