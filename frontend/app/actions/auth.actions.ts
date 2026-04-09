@@ -150,4 +150,4 @@ export async function logout(): Promise<never> {
     revalidatePath("/");
     redirect("/login");
   }
-}                                          
+}
