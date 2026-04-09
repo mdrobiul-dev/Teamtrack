@@ -84,7 +84,7 @@ export async function login(
 
     await setAuthCookies(response);
 
-    revalidatePath("/dashboard"); // Optional: refresh protected pages
+    revalidatePath("/dashboard"); 
     return { success: true };
   } catch (error: unknown) {
     const message =
@@ -143,7 +143,7 @@ export async function logout(): Promise<never> {
   } catch (err) {
     console.error("Logout cleanup error:", err);
   } finally {
-    const cookieStore = await cookies(); // safe even if previous failed
+    const cookieStore = await cookies(); 
     cookieStore.delete("accessToken");
     cookieStore.delete("refreshToken");
 

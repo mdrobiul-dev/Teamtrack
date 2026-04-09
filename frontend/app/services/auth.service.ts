@@ -1,5 +1,5 @@
 import 'server-only';
-import { api } from '@/app/lib/api'; // ← new central client (below)
+import { api } from '@/app/lib/api';
 import { cache } from 'react';
 import type { AuthResponse, LoginCredentials, RegisterCredentials, User } from '@/app/types/auth';
 
@@ -12,7 +12,6 @@ export const authService = {
     return api.post<AuthResponse>('/auth/register', credentials);
   }),
 
-  // Remove refreshToken method — proxy handles it now
 
   getMe: cache(async () => {
     return api.get<{ success: true; user: User }>('/auth/me');
