@@ -11,15 +11,11 @@ import type {
   User,
 } from "@/app/types/auth";
 
-// ── Shared Types ──────────────────────────────────────────────────────────────
-
 type AuthFormState = {
   success: boolean;
   error?: string;
   fieldErrors?: Record<string, string[]>;
 };
-
-// ── Schemas ───────────────────────────────────────────────────────────────────
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -154,4 +150,4 @@ export async function logout(): Promise<never> {
     revalidatePath("/");
     redirect("/login");
   }
-}
+}                  
