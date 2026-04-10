@@ -1,3 +1,4 @@
+// app/lib/api.ts
 import "server-only";
 import { cookies } from "next/headers";
 
@@ -59,3 +60,4 @@ export const api = {
   delete: <T>(path: string, opts?: RequestInit) =>
     apiFetch<T>(path, { method: "DELETE", ...opts }),
 };
+                          
