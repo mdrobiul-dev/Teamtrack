@@ -31,7 +31,6 @@ const registerSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-// ── Helper: Set auth cookies ─────────────────────────────────────────────────
 
 async function setAuthCookies(response: {
   accessToken: string;
@@ -59,7 +58,6 @@ async function setAuthCookies(response: {
   });
 }
 
-// ── Actions ───────────────────────────────────────────────────────────────────
 
 export async function login(
   prevState: AuthFormState,
