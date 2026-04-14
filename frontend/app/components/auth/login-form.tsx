@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useActionState, useRef, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { login } from '@/app/actions/auth.actions';
-import { Button } from '@/app/components/ui/button';
-import { Input } from '@/app/components/ui/input';
+import { useActionState, useRef, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { login } from "@/app/actions/auth.actions";
+import { Button } from "@/app/components/ui/button";
+import { Input } from "@/app/components/ui/input";
 import {
   Card,
   CardHeader,
@@ -13,8 +13,8 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from '@/app/components/ui/card';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
+} from "@/app/components/ui/card";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 export function LoginForm() {
   const [state, formAction, isPending] = useActionState(login, {
@@ -30,7 +30,7 @@ export function LoginForm() {
   useEffect(() => {
     if (state.success && formRef.current) {
       formRef.current.reset();
-      router.push('/dashboard');
+      router.push("/dashboard");
     }
   }, [state.success, router]);
 
@@ -69,10 +69,16 @@ export function LoginForm() {
               placeholder="name@example.com"
               autoComplete="email"
               required
-              className={state?.fieldErrors?.email ? 'border-red-500 focus-visible:ring-red-500' : ''}
+              className={
+                state?.fieldErrors?.email
+                  ? "border-red-500 focus-visible:ring-red-500"
+                  : ""
+              }
             />
             {state?.fieldErrors?.email && (
-              <p className="text-sm text-red-500">{state.fieldErrors.email?.[0]}</p>
+              <p className="text-sm text-red-500">
+                {state.fieldErrors.email?.[0]}
+              </p>
             )}
           </div>
 
@@ -87,21 +93,21 @@ export function LoginForm() {
               <Input
                 id="password"
                 name="password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 autoComplete="current-password"
                 required
                 className={
                   state?.fieldErrors?.password
-                    ? 'border-red-500 focus-visible:ring-red-500 pr-10'
-                    : 'pr-10'
+                    ? "border-red-500 focus-visible:ring-red-500 pr-10"
+                    : "pr-10"
                 }
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
                   <EyeOff className="h-4 w-4" />
@@ -111,7 +117,9 @@ export function LoginForm() {
               </button>
             </div>
             {state?.fieldErrors?.password && (
-              <p className="text-sm text-red-500">{state.fieldErrors.password?.[0]}</p>
+              <p className="text-sm text-red-500">
+                {state.fieldErrors.password?.[0]}
+              </p>
             )}
           </div>
 
@@ -134,12 +142,12 @@ export function LoginForm() {
                 Signing in...
               </>
             ) : (
-              'Sign In'
+              "Sign In"
             )}
           </Button>
 
           <p className="text-sm text-gray-600 text-center">
-            Don&apos;t have an account?{' '}
+            Don&apos;t have an account?{" "}
             <Link
               href="/register"
               className="text-blue-600 hover:text-blue-800 font-medium hover:underline"
@@ -151,4 +159,4 @@ export function LoginForm() {
       </form>
     </Card>
   );
-}                                                        
+}
