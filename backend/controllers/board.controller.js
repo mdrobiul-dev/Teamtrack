@@ -4,17 +4,21 @@ const Workspace = require("../models/Workspace");
 
 const createBoard = async (req, res) => {
   try {
-    const { title, workspaceId } = req.body;
+    const { title } = req.body;
+    const workspaceId = req.params.workspaceId || req.body.workspaceId;
 
     if (!title || !workspaceId) {
       return res.status(400).json({ message: "Title and workspace required" });
     }
 
-    const workspace = await Workspace.findOne({
-      _id: workspaceId,
-    });
+    const workspace = await Workspace.findById(workspaceId);
 
-    if (!workspace) {
+    const hasAccess =
+      workspace &&
+      (workspace.owner?.toString() === req.user.id ||
+        workspace.members.some((m) => m.user?.toString() === req.user.id));
+
+    if (!hasAccess) {
       return res.status(403).json({ message: "Access denied" });
     }
 
@@ -49,10 +53,14 @@ const getBoards = async (req, res) => {
 
     const workspace = await Workspace.findOne({
       _id: workspaceId,
-      members: req.user.id,
     });
 
-    if (!workspace) {
+    const hasAccess =
+      workspace &&
+      (workspace.owner?.toString() === req.user.id ||
+        workspace.members.some((m) => m.user?.toString() === req.user.id));
+
+    if (!hasAccess) {
       return res.status(403).json({ message: "Access denied" });
     }
 

@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   FolderKanban,
   ClipboardList,
+  CheckSquare,
   Users,
   Settings,
   LogOut,
@@ -27,6 +28,7 @@ const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Workspaces", href: "/workspaces", icon: FolderKanban },
   { name: "Boards", href: "/boards", icon: ClipboardList },
+  { name: "Tasks", href: "/tasks", icon: CheckSquare },
   { name: "Team", href: "/team", icon: Users },
   { name: "Settings", href: "/settings", icon: Settings },
 ];

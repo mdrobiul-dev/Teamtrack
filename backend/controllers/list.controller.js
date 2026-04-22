@@ -12,7 +12,13 @@ const createList = async (req, res) => {
 
     const board = await Board.findById(boardId).populate("workspace");
 
-    if (!board || !board.workspace.members.includes(req.user.id)) {
+    const hasAccess =
+      board &&
+      board.workspace &&
+      (board.workspace.owner?.toString() === req.user.id ||
+        board.workspace.members.some((m) => m.user?.toString() === req.user.id));
+
+    if (!hasAccess) {
       return res.status(403).json({ message: "Access denied" });
     }
 
@@ -51,7 +57,13 @@ const getListsByBoard = async (req, res) => {
 
     const board = await Board.findById(boardId).populate("workspace");
 
-    if (!board || !board.workspace.members.includes(req.user.id)) {
+    const hasAccess =
+      board &&
+      board.workspace &&
+      (board.workspace.owner?.toString() === req.user.id ||
+        board.workspace.members.some((m) => m.user?.toString() === req.user.id));
+
+    if (!hasAccess) {
       return res.status(400).json({ message: "Access denied" });
     }
 

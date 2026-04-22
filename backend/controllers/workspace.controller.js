@@ -1,5 +1,6 @@
 const Activity = require("../models/Activity");
 const Workspace = require("../models/Workspace");
+const mongoose = require("mongoose");
 
 const createWorkspace = async (req, res) => {
   try {
@@ -43,7 +44,9 @@ const createWorkspace = async (req, res) => {
 
 const getMyWorkspaces = async (req, res) => {
   try {
-    const workspaces = await Workspace.find({ members: req.user.id });
+    const workspaces = await Workspace.find({
+      $or: [{ owner: req.user.id }, { "members.user": req.user.id }],
+    });
 
     res.status(200).json(workspaces);
   } catch (error) {
@@ -57,6 +60,10 @@ const addMember = async (req, res) => {
     const { userId } = req.body;
     const { workspaceId } = req.params;
 
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid user id" });
+    }
+
     const workspace = await Workspace.findById(workspaceId);
 
     if (!workspace) {
@@ -66,7 +73,7 @@ const addMember = async (req, res) => {
     const isAdmin =
       workspace.owner.toString() === req.user.id ||
       workspace.members.some(
-        (m) => m.user.toString === req.user.id && m.role === "admin",
+        (m) => m.user?.toString() === req.user.id && m.role === "admin",
       );
 
     if (!isAdmin) {
