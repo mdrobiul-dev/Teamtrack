@@ -7,7 +7,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-
 export function HeroSection() {
   return (
     <section className="relative isolate overflow-hidden bg-gradient-to-b from-white via-gray-50/40 to-white pb-20 pt-32 sm:pt-40 lg:pt-48">
