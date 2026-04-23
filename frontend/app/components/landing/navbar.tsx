@@ -33,7 +33,7 @@ export function Navbar() {
           "fixed left-0 right-0 top-0 z-40 transition-all duration-500",
           isScrolled
             ? "bg-white/80 backdrop-blur-xl shadow-lg"
-            : "bg-gradient-to-r from-white/95 via-primary-50/90 to-secondary-50/95 backdrop-blur-sm"
+            : "bg-gradient-to-r from-white/95 via-primary-50/90 to-secondary-50/95 backdrop-blur-sm",
         )}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
@@ -72,7 +72,11 @@ export function Navbar() {
             className="md:hidden rounded-lg p-2 text-gray-600 transition-colors hover:bg-white/50 focus:outline-none focus:ring-0"
             aria-label="Toggle menu"
           >
-            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </button>
         </div>
       </header>
