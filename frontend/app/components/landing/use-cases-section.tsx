@@ -3,7 +3,12 @@
 import { useState } from "react";
 import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
-import { BookOpen, Briefcase, Users as UsersIcon, CheckCircle } from "lucide-react";
+import {
+  BookOpen,
+  Briefcase,
+  Users as UsersIcon,
+  CheckCircle,
+} from "lucide-react";
 import Image from "next/image";
 
 const useCases = {
@@ -49,7 +54,8 @@ const useCases = {
 };
 
 export function UseCasesSection() {
-  const [activeCase, setActiveCase] = useState<keyof typeof useCases>("students");
+  const [activeCase, setActiveCase] =
+    useState<keyof typeof useCases>("students");
 
   // Get the current icon component
   const CurrentIcon = useCases[activeCase].icon;
@@ -66,8 +72,8 @@ export function UseCasesSection() {
             </span>
           </h2>
           <p className="mt-4 text-lg text-gray-600">
-            Whether you&apos;re a student, freelancer, or part of a growing team —
-            TaskFlow adapts to your workflow.
+            Whether you&apos;re a student, freelancer, or part of a growing team
+            — TaskFlow adapts to your workflow.
           </p>
         </div>
 
@@ -81,7 +87,7 @@ export function UseCasesSection() {
                 "flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all",
                 activeCase === key
                   ? "bg-white text-primary-600 shadow-sm ring-1 ring-primary-200"
-                  : "text-gray-500 hover:bg-white/60 hover:text-gray-700"
+                  : "text-gray-500 hover:bg-white/60 hover:text-gray-700",
               )}
             >
               <value.icon className="h-4 w-4" />
