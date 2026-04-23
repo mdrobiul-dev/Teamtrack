@@ -12,6 +12,66 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@theme {
+  /* Primary Colors */
+  --color-primary-50: #f4f0fc;
+  --color-primary-100: #e8e0f8;
+  --color-primary-200: #cbbbf0;
+  --color-primary-300: #ae96e7;
+  --color-primary-400: #7452d4;
+  --color-primary-500: #462c7d;
+  --color-primary-600: #3a2469;
+  --color-primary-700: #2e1d55;
+  --color-primary-800: #231641;
+  --color-primary-900: #170e2c;
+
+  /* Secondary Colors */
+  --color-secondary-50: #fdf2fa;
+  --color-secondary-100: #fbe5f5;
+  --color-secondary-200: #f6cceb;
+  --color-secondary-300: #e89fd6;
+  --color-secondary-400: #d552a3;
+  --color-secondary-500: #c0418f;
+  --color-secondary-600: #831c91;
+  --color-secondary-700: #6d167a;
+  --color-secondary-800: #56105e;
+  --color-secondary-900: #3f0a45;
+
+  /* Accent Colors */
+  --color-accent-50: #fff0f8;
+  --color-accent-100: #ffe1f0;
+  --color-accent-200: #ffc4e2;
+  --color-accent-300: #ff9acf;
+  --color-accent-400: #ff70bf;
+  --color-accent-500: #f555ab;
+  --color-accent-600: #e63a95;
+  --color-accent-700: #cc257c;
+  --color-accent-800: #ad1d63;
+  --color-accent-900: #8e154b;
+
+  /* Extended Font Family */
+  --font-sans: "Inter", "Plus Jakarta Sans", var(--font-geist-sans), system-ui, sans-serif;
+
+  /* Custom Animations */
+  --animate-infinite-scroll: infinite-scroll 25s linear infinite;
+
+  @keyframes infinite-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+}
+
+/* Custom Utilities */
+@utility text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
