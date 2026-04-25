@@ -13,14 +13,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/app/components/ui/card";
-import {
-  Eye,
-  EyeOff,
-  Loader2,
-  Mail,
-  Lock,
-  ArrowRight,
-} from "lucide-react";
+import { Eye, EyeOff, Loader2, Mail, Lock, ArrowRight } from "lucide-react";
 
 export function LoginForm() {
   const [state, formAction, isPending] = useActionState(login, {
