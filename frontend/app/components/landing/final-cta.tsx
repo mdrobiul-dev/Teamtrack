@@ -35,7 +35,7 @@ export function FinalCTA() {
               className="rounded-full bg-accent-500 px-8 py-4.5 text-lg font-semibold text-white shadow-lg shadow-accent-500/40 transition-all hover:bg-accent-600 hover:shadow-xl active:scale-95 h-auto"
             >
               <Link
-                href="/signup"
+                href="/register"
                 className="flex items-center whitespace-nowrap"
               >
                 Create Your Free Account <ArrowRight className="ml-2 h-5 w-5" />

@@ -9,7 +9,7 @@ import Image from "next/image";
 
 export function HeroSection() {
   return (
-    <section className="relative isolate overflow-hidden bg-gradient-to-b from-white via-gray-50/40 to-white pb-20 pt-32 sm:pt-40 lg:pt-48">
+    <section className="relative isolate overflow-hidden bg-gradient-to-b from-white via-gray-50/40 to-white pb-20 pt-30 sm:pt-38 lg:pt-40">
       {/* Subtle gradient background */}
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-secondary-100/30 via-transparent to-transparent" />
 
@@ -61,7 +61,7 @@ export function HeroSection() {
               asChild
               className="rounded-full bg-accent-500 px-8 py-4.5 text-lg font-semibold text-white shadow-lg shadow-accent-500/30 transition-all hover:bg-accent-600 hover:shadow-xl active:scale-95 h-auto"
             >
-              <Link href="/signup">
+              <Link href="/register">
                 Start for Free{" "}
                 <ArrowRight className="ml-2 h-5 w-5 inline-block" />
               </Link>

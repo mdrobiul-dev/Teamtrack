@@ -5,12 +5,12 @@ import Image from "next/image";
 import Marquee from "react-fast-marquee";
 
 const companies = [
-  { name: "Vercel", logo: "/logos/vercel.svg" },
-  { name: "Stripe", logo: "/logos/stripe.svg" },
-  { name: "Y Combinator", logo: "/logos/yc.svg" },
-  { name: "Notion", logo: "/logos/notion.svg" },
-  { name: "Slack", logo: "/logos/slack.svg" },
-  { name: "Figma", logo: "/logos/figma.svg" },
+  { name: "Vercel", logo: "/vercel.svg" },
+  { name: "Cursor", logo: "/cursor.svg" },
+  { name: "Hermes", logo: "/hermesagent.svg" },
+  { name: "Notion", logo: "/notion.svg" },
+  { name: "ElevenLabs", logo: "/elevenlabs.svg" },
+  { name: "Figma", logo: "/figma.svg" },
 ];
 
 export function SocialProof() {

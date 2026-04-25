@@ -1,4 +1,4 @@
-// components/landing/footer.tsx
+import { Zap } from "lucide-react";
 import Link from "next/link";
 
 const footerLinks = {
@@ -35,10 +35,17 @@ export function Footer() {
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           {/* Brand Column */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-accent-500 to-secondary-400" />
-              <span className="text-xl font-bold">TaskFlow</span>
-            </Link>
+           <Link href="/" className="flex items-center gap-2 group">
+            <div className="relative">
+              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-accent-500 to-secondary-500 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative h-7 w-7 rounded-lg bg-gradient-to-br from-accent-400 to-secondary-500 flex items-center justify-center">
+                <Zap className="h-3.5 w-3.5 text-white" />
+              </div>
+            </div>
+            <span className="text-lg font-bold tracking-tight transition-all duration-300 text-white">
+              TaskFlow
+            </span>
+          </Link>
             <p className="text-sm text-primary-200">
               Organize your work. Reclaim your focus.
             </p>
