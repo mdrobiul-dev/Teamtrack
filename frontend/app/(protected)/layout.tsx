@@ -1,5 +1,5 @@
-import { requireAuth } from '@/app/lib/auth';
-import { DashboardLayout } from '@/app/components/layout/dashboard-layout';
+import { requireAuth } from "@/app/lib/auth";
+import { DashboardLayout } from "@/app/components/layout/dashboard-layout";
 
 export default async function ProtectedLayout({
   children,
