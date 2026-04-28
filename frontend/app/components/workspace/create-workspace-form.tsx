@@ -86,5 +86,4 @@ export function CreateWorkspaceForm() {
         </div>
       </div>
     </form>
-  );                          
-}                                                       
+  );                                                               
