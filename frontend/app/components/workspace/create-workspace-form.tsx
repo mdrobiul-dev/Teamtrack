@@ -28,7 +28,7 @@ export function CreateWorkspaceForm() {
         router.refresh();
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : "Failed to create workspace"
+          err instanceof Error ? err.message : "Failed to create workspace",
         );
       }
     });
@@ -54,9 +54,7 @@ export function CreateWorkspaceForm() {
                 disabled:opacity-50 disabled:cursor-not-allowed
               "
             />
-            {error && (
-              <p className="mt-2 text-sm text-red-500">{error}</p>
-            )}
+            {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
           </div>
           <button
             type="submit"
@@ -86,5 +84,5 @@ export function CreateWorkspaceForm() {
         </div>
       </div>
     </form>
-  );                          
-}                                                              
+  );
+}
