@@ -1,30 +1,29 @@
 // app/components/workspace/workspace-page-client.tsx
 "use client";
 
-import { SparklesIcon, ArrowRightIcon } from 'lucide-react';
-import { useState, useOptimistic } from 'react';
-import { WorkspaceCard } from '../../components/workspace/workspace-card';
-import { CreateWorkspaceForm } from './create-workspace-form';
+import { SparklesIcon, ArrowRightIcon } from "lucide-react";
+import { useState, useOptimistic } from "react";
+import { WorkspaceCard } from "../../components/workspace/workspace-card";
+import { CreateWorkspaceForm } from "./create-workspace-form";
 import type { Workspace } from "@/app/types/workspace";
 
-export function WorkspacePageClient({ 
-  initialWorkspaces 
-}: { 
-  initialWorkspaces: Workspace[] 
+export function WorkspacePageClient({
+  initialWorkspaces,
+}: {
+  initialWorkspaces: Workspace[];
 }) {
-  
   const [workspaces, setWorkspaces] = useState<Workspace[]>(initialWorkspaces);
   const [optimisticWorkspaces, addOptimisticWorkspace] = useOptimistic(
     workspaces,
-    (state: Workspace[], newWorkspace: Workspace) => [...state, newWorkspace]
+    (state: Workspace[], newWorkspace: Workspace) => [...state, newWorkspace],
   );
 
   const handleWorkspaceCreated = (newWorkspace: Workspace) => {
-    setWorkspaces(prev => [...prev, newWorkspace]);
+    setWorkspaces((prev) => [...prev, newWorkspace]);
   };
 
   const handleDelete = (id: string) => {
-    setWorkspaces(prev => prev.filter(w => w._id !== id));
+    setWorkspaces((prev) => prev.filter((w) => w._id !== id));
     // TODO: Call your delete server action here
   };
 
@@ -40,7 +39,6 @@ export function WorkspacePageClient({
       <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03] pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8 pb-24">
-        
         {/* Empty State Header */}
         {!hasWorkspaces && (
           <div className="mb-20 text-center">
@@ -75,7 +73,8 @@ export function WorkspacePageClient({
                 My Workspaces
               </h2>
               <span className="text-sm text-white/40 bg-white/5 px-4 py-1.5 rounded-full border border-white/10">
-                {optimisticWorkspaces.length} workspace{optimisticWorkspaces.length !== 1 ? 's' : ''}
+                {optimisticWorkspaces.length} workspace
+                {optimisticWorkspaces.length !== 1 ? "s" : ""}
               </span>
             </div>
 
@@ -92,7 +91,7 @@ export function WorkspacePageClient({
         )}
 
         {/* Create Form */}
-        <div className={`max-w-lg mx-auto ${hasWorkspaces ? 'mt-12' : 'mt-8'}`}>
+        <div className={`max-w-lg mx-auto ${hasWorkspaces ? "mt-12" : "mt-8"}`}>
           <CreateWorkspaceForm onSuccess={handleWorkspaceCreated} />
         </div>
       </div>
