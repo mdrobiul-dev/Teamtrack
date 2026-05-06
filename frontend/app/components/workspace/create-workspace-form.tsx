@@ -87,7 +87,6 @@
 //   );
 // }
 
-
 // Inside CreateWorkspaceForm
 // app/components/workspace/create-workspace-form.tsx
 "use client";
@@ -117,7 +116,7 @@ export function CreateWorkspaceForm({ onSuccess }: CreateWorkspaceFormProps) {
 
     try {
       const result = await createWorkspaceAction(formData);
-      
+
       if (result.success && result.workspace) {
         onSuccess?.(result.workspace);
         setWorkspaceName("");
@@ -166,7 +165,11 @@ export function CreateWorkspaceForm({ onSuccess }: CreateWorkspaceFormProps) {
       )}
 
       <p className="text-center text-xs text-white/30 mt-4">
-        Press <kbd className="px-2 py-0.5 bg-white/5 border border-white/10 rounded text-[10px]">Enter</kbd> to create
+        Press{" "}
+        <kbd className="px-2 py-0.5 bg-white/5 border border-white/10 rounded text-[10px]">
+          Enter
+        </kbd>{" "}
+        to create
       </p>
     </div>
   );
