@@ -19,7 +19,7 @@ export function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
           No workspaces yet
         </h3>
         <p className="text-primary-400 max-w-md mx-auto">
-          Create your first workspace above to start organizing your team's
+          Create your first workspace above to start organizing your team&apos;s
           projects and tasks efficiently.
         </p>
       </div>
