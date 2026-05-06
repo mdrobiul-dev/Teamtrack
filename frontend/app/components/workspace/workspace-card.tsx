@@ -69,12 +69,19 @@
 //   );
 // }
 
-
 "use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Users, LayoutDashboard, CheckSquare, Trash2, X, ArrowUpRight, Calendar } from "lucide-react";
+import {
+  Users,
+  LayoutDashboard,
+  CheckSquare,
+  Trash2,
+  X,
+  ArrowUpRight,
+  Calendar,
+} from "lucide-react";
 import type { Workspace } from "@/app/types/workspace";
 
 interface WorkspaceCardProps {
@@ -85,10 +92,13 @@ interface WorkspaceCardProps {
 export function WorkspaceCard({ workspace, onDelete }: WorkspaceCardProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  const createdDate = new Date(workspace.createdAt).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
+  const createdDate = new Date(workspace.createdAt).toLocaleDateString(
+    "en-US",
+    {
+      month: "short",
+      day: "numeric",
+    },
+  );
 
   const memberCount = workspace.members?.length || 0;
 
@@ -119,25 +129,31 @@ export function WorkspaceCard({ workspace, onDelete }: WorkspaceCardProps) {
                  hover:shadow-lg hover:shadow-cyan-500/5 block"
     >
       {/* Hover gradient effect */}
-      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-purple-500/5 
-                    opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-      
+      <div
+        className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-purple-500/5 
+                    opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+      />
+
       {/* Top accent line */}
-      <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-white/0 to-transparent 
-                    group-hover:via-cyan-400/20 transition-all duration-700" />
+      <div
+        className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-white/0 to-transparent 
+                    group-hover:via-cyan-400/20 transition-all duration-700"
+      />
 
       <div className="relative p-5">
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/10 to-purple-500/10 
+            <div
+              className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/10 to-purple-500/10 
                           border border-white/5 group-hover:border-cyan-400/20 
                           flex items-center justify-center shrink-0
                           group-hover:from-cyan-500/20 group-hover:to-purple-500/20 
-                          transition-all duration-300">
+                          transition-all duration-300"
+            >
               <LayoutDashboard className="w-5 h-5 text-cyan-400/80 group-hover:text-cyan-400 transition-colors" />
             </div>
-            
+
             <div className="min-w-0 flex-1">
               <h3 className="text-white/90 font-medium truncate group-hover:text-white transition-colors">
                 {workspace.name}
@@ -145,14 +161,16 @@ export function WorkspaceCard({ workspace, onDelete }: WorkspaceCardProps) {
               <div className="flex items-center gap-2 mt-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                 <span className="text-[11px] text-white/30">Active</span>
-                <span className="text-[11px] text-white/20">• {createdDate}</span>
+                <span className="text-[11px] text-white/20">
+                  • {createdDate}
+                </span>
               </div>
             </div>
           </div>
 
           {/* Delete Button */}
-          {onDelete && (
-            showDeleteConfirm ? (
+          {onDelete &&
+            (showDeleteConfirm ? (
               <div className="flex items-center gap-1 ml-2 animate-fade-in">
                 <button
                   onClick={handleDeleteClick}
@@ -174,8 +192,7 @@ export function WorkspaceCard({ workspace, onDelete }: WorkspaceCardProps) {
               >
                 <Trash2 className="w-4 h-4" />
               </button>
-            )
-          )}
+            ))}
         </div>
 
         {/* Divider */}
@@ -191,7 +208,9 @@ export function WorkspaceCard({ workspace, onDelete }: WorkspaceCardProps) {
 
           <div className="text-center">
             <Users className="w-4 h-4 mx-auto text-white/30 mb-1" />
-            <div className="text-lg font-semibold text-white/80">{memberCount}</div>
+            <div className="text-lg font-semibold text-white/80">
+              {memberCount}
+            </div>
             <div className="text-[10px] text-white/30">Members</div>
           </div>
 
@@ -203,9 +222,11 @@ export function WorkspaceCard({ workspace, onDelete }: WorkspaceCardProps) {
         </div>
 
         {/* Open Button */}
-        <div className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl
+        <div
+          className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl
                       bg-white/[0.03] border border-white/5 hover:border-cyan-400/30
-                      text-white/60 hover:text-white transition-all duration-300 text-sm font-medium">
+                      text-white/60 hover:text-white transition-all duration-300 text-sm font-medium"
+        >
           Open Workspace
           <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </div>
