@@ -11,7 +11,8 @@ import { deleteWorkspaceAction } from "@/app/actions/workspace.actions";
 type WorkspaceInput = Workspace | { workspace?: Workspace };
 
 function normalizeWorkspace(input: WorkspaceInput): Workspace | null {
-  const workspace = "workspace" in input && input.workspace ? input.workspace : input;
+  const workspace =
+    "workspace" in input && input.workspace ? input.workspace : input;
 
   if (!workspace._id) {
     return null;
