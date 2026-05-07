@@ -4,6 +4,7 @@ const {
   createWorkspace,
   getMyWorkspaces,
   addMember,
+  deleteWorkspace,
 } = require("../controllers/workspace.controller");
 const requireWorkspaceAdmin = require("../middlewear/workspaceRole.middleware");
 
@@ -18,5 +19,6 @@ router.post(
   addMember,
 );
 router.get("/", protected, getMyWorkspaces);
+router.delete("/:workspaceId", protected, requireWorkspaceAdmin, deleteWorkspace);
 
 module.exports = router;

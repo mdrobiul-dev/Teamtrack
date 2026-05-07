@@ -37,21 +37,42 @@ export async function createWorkspaceAction(formData: FormData) {
   }
 
   try {
-    const session = await requireAuth();
+    await requireAuth();
 
-    // Pass only the name for now (since your service expects string)
-    const newWorkspace = await workspaceService.createWorkspace(name.trim());
+    const result = await workspaceService.createWorkspace(name.trim());
 
     revalidatePath("/workspaces");
 
-    return { 
-      success: true, 
-      workspace: newWorkspace 
+    return {
+      success: true,
+      workspace: result.workspace,
     };
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : "Failed to create workspace"
+    );
+  }
+}
+
+export async function deleteWorkspaceAction(workspaceId: string) {
+  if (!workspaceId?.trim()) {
+    throw new Error("Workspace ID is required");
+  }
+
+  try {
+    const result = await workspaceService.deleteWorkspace(workspaceId);
+
+    revalidatePath("/workspaces");
+
+    return {
+      success: true,
+      message: result.message,
+    };
+  } catch (error) {
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : "Failed to delete workspace",
     );
   }
 }

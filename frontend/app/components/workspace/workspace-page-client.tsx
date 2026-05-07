@@ -1,30 +1,72 @@
 // app/components/workspace/workspace-page-client.tsx
 "use client";
 
-import { SparklesIcon, ArrowRightIcon } from "lucide-react";
+import { SparklesIcon } from "lucide-react";
 import { useState, useOptimistic } from "react";
 import { WorkspaceCard } from "../../components/workspace/workspace-card";
 import { CreateWorkspaceForm } from "./create-workspace-form";
 import type { Workspace } from "@/app/types/workspace";
+import { deleteWorkspaceAction } from "@/app/actions/workspace.actions";
+
+type WorkspaceInput = Workspace | { workspace?: Workspace };
+
+function normalizeWorkspace(input: WorkspaceInput): Workspace | null {
+  const workspace = "workspace" in input && input.workspace ? input.workspace : input;
+
+  if (!workspace._id) {
+    return null;
+  }
+
+  return workspace;
+}
 
 export function WorkspacePageClient({
   initialWorkspaces,
 }: {
   initialWorkspaces: Workspace[];
 }) {
-  const [workspaces, setWorkspaces] = useState<Workspace[]>(initialWorkspaces);
-  const [optimisticWorkspaces, addOptimisticWorkspace] = useOptimistic(
+  const [workspaces, setWorkspaces] = useState<Workspace[]>(() =>
+    initialWorkspaces
+      .map((workspace) => normalizeWorkspace(workspace))
+      .filter((workspace): workspace is Workspace => Boolean(workspace)),
+  );
+  const [optimisticWorkspaces] = useOptimistic(
     workspaces,
     (state: Workspace[], newWorkspace: Workspace) => [...state, newWorkspace],
   );
 
   const handleWorkspaceCreated = (newWorkspace: Workspace) => {
-    setWorkspaces((prev) => [...prev, newWorkspace]);
+    const workspace = normalizeWorkspace(newWorkspace);
+
+    if (!workspace) {
+      console.error("Created workspace is missing an _id", newWorkspace);
+      return;
+    }
+
+    setWorkspaces((prev) => [...prev, workspace]);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
+    if (!id) {
+      console.error("Cannot delete workspace without an _id");
+      return;
+    }
+
+    const workspaceToDelete = workspaces.find(
+      (workspace) => workspace._id === id,
+    );
+
     setWorkspaces((prev) => prev.filter((w) => w._id !== id));
-    // TODO: Call your delete server action here
+
+    try {
+      await deleteWorkspaceAction(id);
+    } catch (error) {
+      if (workspaceToDelete) {
+        setWorkspaces((prev) => [...prev, workspaceToDelete]);
+      }
+
+      console.error(error);
+    }
   };
 
   const hasWorkspaces = optimisticWorkspaces.length > 0;

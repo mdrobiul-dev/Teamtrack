@@ -92,7 +92,7 @@ const addMember = async (req, res) => {
 
     await workspace.save();
 
-       const activity = new Activity({
+    const activity = new Activity({
       user: req.user.id,
       action: "A member has been added to workspace",
       entityType: "workspace",
@@ -109,4 +109,56 @@ const addMember = async (req, res) => {
   }
 };
 
-module.exports = { createWorkspace, getMyWorkspaces, addMember };
+const deleteWorkspace = async (req, res) => {
+  try {
+    const { workspaceId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(workspaceId)) {
+      return res.status(400).json({ message: "Invalid workspace id" });
+    }
+
+    const workspace = await Workspace.findById(workspaceId);
+
+    if (!workspace) {
+      return res.status(404).json({ message: "Workspace not found" });
+    }
+
+    const isAdmin =
+      workspace.owner.toString() === req.user.id ||
+      workspace.members.some(
+        (m) => m.user?.toString() === req.user.id && m.role === "admin",
+      );
+
+    if (!isAdmin) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to delete this workspace" });
+    }
+
+    await Workspace.findByIdAndDelete(workspaceId);
+
+    const activity = new Activity({
+      user: req.user.id,
+      action: "Workspace has been deleted",
+      entityType: "workspace",
+      entityId: workspace._id,
+      workspace: workspace._id,
+    });
+
+    await activity.save();
+
+    res.status(200).json({
+      message: "Workspace deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = {
+  createWorkspace,
+  getMyWorkspaces,
+  addMember,
+  deleteWorkspace,
+};

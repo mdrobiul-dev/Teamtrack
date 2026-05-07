@@ -12,4 +12,8 @@ export const workspaceService = {
       name,
     });
   },
+
+  deleteWorkspace: async (workspaceId: string) => {
+    return api.delete<{ message: string }>(`/workspaces/${workspaceId}`);
+  },
 };

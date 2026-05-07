@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
 import { cn } from "../../lib/utils"
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -9,7 +10,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "default", size = "default", asChild, children, ...props }, ref) => {
-    const Comp = asChild ? React.Fragment : "button"
+    const Comp = asChild ? Slot : "button"
     const sizeClasses = {
       default: "h-10 px-4 py-2",
       sm: "h-9 rounded-md px-3",
@@ -20,20 +21,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       outline: "border border-gray-200 bg-white hover:bg-gray-100",
       ghost: "hover:bg-gray-100",
     }
-    
+
+    const buttonClassName = cn(
+      "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+      variantClasses[variant],
+      sizeClasses[size],
+      className
+    )
+
     return (
-      <Comp {...props} ref={ref as any}>
-        <button
-          className={cn(
-            "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-            variantClasses[variant],
-            sizeClasses[size],
-            className
-          )}
-          {...props}
-        >
-          {children}
-        </button>
+      <Comp className={buttonClassName} ref={ref} {...props}>
+        {children}
       </Comp>
     )
   }
