@@ -7,6 +7,10 @@ export const workspaceService = {
     return api.get<Workspace[]>("/workspaces");
   },
 
+  getWorkspaceById: async (workspaceId: string) => {
+    return api.get<Workspace>(`/workspaces/${workspaceId}`);
+  },
+
   createWorkspace: async (name: string) => {
     return api.post<{ message: string; workspace: Workspace }>("/workspaces", {
       name,

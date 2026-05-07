@@ -75,4 +75,69 @@ const getBoards = async (req, res) => {
   }
 };
 
-module.exports = { createBoard, getBoards };
+const deleteBoard = async (req, res) => {
+  try {
+    const { workspaceId, boardId } = req.params;
+    const userId = req.user.id;
+
+    if (!workspaceId || !boardId) {
+      return res.status(400).json({ 
+        message: "Workspace ID and Board ID are required" 
+      });
+    }
+
+    // Find the board and populate workspace
+    const board = await Board.findById(boardId).populate("workspace");
+
+    if (!board) {
+      return res.status(404).json({ message: "Board not found" });
+    }
+
+    // Extra security: Ensure the board actually belongs to this workspace
+    if (board.workspace._id.toString() !== workspaceId) {
+      return res.status(400).json({ 
+        message: "Board does not belong to this workspace" 
+      });
+    }
+
+    const workspace = board.workspace;
+
+    // Permission check: Only owner or admin can delete
+    const hasAccess =
+      workspace &&
+      (workspace.owner?.toString() === userId ||
+        workspace.members.some(
+          (m) => m.user?.toString() === userId && m.role === "admin"
+        ));
+
+    if (!hasAccess) {
+      return res.status(403).json({
+        message: "Access denied. Only workspace admins can delete boards.",
+      });
+    }
+
+    // Delete the board
+    await Board.findByIdAndDelete(boardId);
+
+    // Log activity
+    const activity = new Activity({
+      user: userId,
+      action: "A Board has been deleted",
+      entityType: "board",
+      entityId: board._id,
+      workspace: workspace._id,
+    });
+
+    await activity.save();
+
+    res.status(200).json({
+      message: "Board deleted successfully",
+      boardId: board._id,
+    });
+  } catch (error) {
+    console.error("Delete Board Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { createBoard, getBoards, deleteBoard };

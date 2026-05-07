@@ -2,7 +2,7 @@
 import { Metadata } from "next";
 import { requireAuth } from "@/app/lib/auth";
 import { workspaceService } from "@/app/services/workspace.service";
-import { WorkspacePageClient } from "@/app/components/workspace/workspace-page-client";
+import { WorkspacePageDetails } from "@/app/components/workspace/workspace-page-details";
 
 export const metadata: Metadata = {
   title: "Workspaces - TeamTrack",
@@ -13,5 +13,5 @@ export default async function WorkspacesPage() {
   const session = await requireAuth();
   const workspaces = await workspaceService.getMyWorkspaces();
 
-  return <WorkspacePageClient initialWorkspaces={workspaces} />;
+  return <WorkspacePageDetails initialWorkspaces={workspaces} />;
 }

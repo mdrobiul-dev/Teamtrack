@@ -10,4 +10,10 @@ export const boardService = {
   createBoard: async (workspaceId: string, title: string) => {
     return api.post<Board>(`/boards/${workspaceId}`, { title, workspaceId });
   },
+
+  deleteBoard: async (workspaceId: string, boardId: string) => {
+    return api.delete<{ message: string; boardId: string }>(
+      `/boards/${workspaceId}/boards/${boardId}`,
+    );
+  },
 };

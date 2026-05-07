@@ -20,6 +20,11 @@ const createBoardSchema = z.object({
   title: z.string().min(2, "Board title must be at least 2 characters"),
 });
 
+const deleteBoardSchema = z.object({
+  workspaceId: z.string().min(1, "Workspace ID is required"),
+  boardId: z.string().min(1, "Board ID is required"),
+});
+
 const toErrorMessage = (error: unknown) => {
   if (error instanceof Error && error.message.trim()) return error.message;
   return "Something went wrong";
@@ -37,6 +42,24 @@ export async function getBoardsByWorkspaceAction(input: {
   }
 }
 
+export async function deleteBoardAction(input: {
+  workspaceId: string;
+  boardId: string;
+}): Promise<ActionResult<{ boardId: string }>> {
+  try {
+    const payload = deleteBoardSchema.parse(input);
+    const data = await boardService.deleteBoard(
+      payload.workspaceId,
+      payload.boardId,
+    );
+    revalidatePath("/workspaces");
+    revalidatePath(`/workspaces/${payload.workspaceId}`);
+    return { success: true, message: data.message, data: { boardId: data.boardId } };
+  } catch (error) {
+    return { success: false, message: toErrorMessage(error) };
+  }
+}
+
 export async function createBoardAction(input: {
   workspaceId: string;
   title: string;
@@ -45,6 +68,7 @@ export async function createBoardAction(input: {
     const payload = createBoardSchema.parse(input);
     const data = await boardService.createBoard(payload.workspaceId, payload.title);
     revalidatePath("/workspaces");
+    revalidatePath(`/workspaces/${payload.workspaceId}`);
     return { success: true, message: "Board created", data };
   } catch (error) {
     return { success: false, message: toErrorMessage(error) };

@@ -3,6 +3,7 @@ const protected = require("../middlewear/auth.middleware");
 const {
   createWorkspace,
   getMyWorkspaces,
+  getWorkspaceById,
   addMember,
   deleteWorkspace,
 } = require("../controllers/workspace.controller");
@@ -19,6 +20,7 @@ router.post(
   addMember,
 );
 router.get("/", protected, getMyWorkspaces);
+router.get("/:workspaceId", protected, getWorkspaceById);
 router.delete("/:workspaceId", protected, requireWorkspaceAdmin, deleteWorkspace);
 
 module.exports = router;

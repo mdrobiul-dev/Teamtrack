@@ -55,6 +55,30 @@ const getMyWorkspaces = async (req, res) => {
   }
 };
 
+const getWorkspaceById = async (req, res) => {
+  try {
+    const { workspaceId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(workspaceId)) {
+      return res.status(400).json({ message: "Invalid workspace id" });
+    }
+
+    const workspace = await Workspace.findOne({
+      _id: workspaceId,
+      $or: [{ owner: req.user.id }, { "members.user": req.user.id }],
+    });
+
+    if (!workspace) {
+      return res.status(404).json({ message: "Workspace not found" });
+    }
+
+    res.status(200).json(workspace);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 const addMember = async (req, res) => {
   try {
     const { userId } = req.body;
@@ -159,6 +183,7 @@ const deleteWorkspace = async (req, res) => {
 module.exports = {
   createWorkspace,
   getMyWorkspaces,
+  getWorkspaceById,
   addMember,
   deleteWorkspace,
 };

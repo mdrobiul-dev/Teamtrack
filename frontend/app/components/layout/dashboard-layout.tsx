@@ -1,6 +1,6 @@
 "use client";
 
-import { CSSProperties, ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
 import { Menu } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/app/components/ui/sheet";

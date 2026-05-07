@@ -3,7 +3,7 @@
 
 import { SparklesIcon } from "lucide-react";
 import { useState, useOptimistic } from "react";
-import { WorkspaceCard } from "../../components/workspace/workspace-card";
+import { WorkspaceCard } from "./workspace-card";
 import { CreateWorkspaceForm } from "./create-workspace-form";
 import type { Workspace } from "@/app/types/workspace";
 import { deleteWorkspaceAction } from "@/app/actions/workspace.actions";
@@ -26,7 +26,7 @@ function normalizeWorkspace(input: WorkspaceInput): Workspace | null {
   return workspace;
 }
 
-export function WorkspacePageClient({
+export function WorkspacePageDetails({
   initialWorkspaces,
 }: {
   initialWorkspaces: Workspace[];
