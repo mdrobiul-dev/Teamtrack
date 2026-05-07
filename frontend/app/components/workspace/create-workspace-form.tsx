@@ -43,9 +43,9 @@ export function CreateWorkspaceForm({ onSuccess }: CreateWorkspaceFormProps) {
   return (
     <div className="max-w-lg mx-auto">
       <form onSubmit={handleSubmit} className="relative group">
-        <div className="absolute -inset-px bg-gradient-to-r from-cyan-500/0 via-cyan-500/20 to-purple-500/0 rounded-3xl blur-sm opacity-0 group-hover:opacity-100 transition duration-700" />
+        <div className="absolute -inset-px bg-linear-to-r from-cyan-500/0 via-cyan-500/20 to-purple-500/0 rounded-3xl blur-sm opacity-0 group-hover:opacity-100 transition duration-700" />
 
-        <div className="relative rounded-3xl bg-white/[0.02] backdrop-blur-2xl border border-white/8 p-6">
+        <div className="relative rounded-3xl bg-white/2 backdrop-blur-2xl border border-white/8 p-6">
           <div className="flex items-center gap-3">
             <input
               type="text"
