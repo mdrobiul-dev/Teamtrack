@@ -10,10 +10,11 @@ import {
   Users,
   Settings,
   LogOut,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
-import { useTransition } from "react";
+import { useTransition, useState } from "react";
 import { logout } from "@/app/actions/auth.actions";
-import { Button } from "@/app/components/ui/button";
 import { cn } from "@/app/lib/utils";
 
 interface SidebarContentProps {
@@ -22,78 +23,128 @@ interface SidebarContentProps {
     name: string;
     email: string;
   };
+  isCollapsed?: boolean;
+  setIsCollapsed?: (collapsed: boolean) => void;
 }
 
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Workspaces", href: "/workspaces", icon: FolderKanban },
-  { name: "Boards", href: "/boards", icon: ClipboardList },
-  { name: "Tasks", href: "/tasks", icon: CheckSquare },
-  { name: "Team", href: "/team", icon: Users },
-  { name: "Settings", href: "/settings", icon: Settings },
-];
-
-export function SidebarContent({ user }: SidebarContentProps) {
+export function SidebarContent({ 
+  user, 
+  isCollapsed: externalCollapsed, 
+  setIsCollapsed: externalSetCollapsed 
+}: SidebarContentProps) {
+  
   const pathname = usePathname();
+  const [internalCollapsed, setInternalCollapsed] = useState(false);
   const [isPending, startTransition] = useTransition();
 
+  // Use external state (from layout) on desktop, internal for mobile
+  const isCollapsed = externalCollapsed !== undefined ? externalCollapsed : internalCollapsed;
+  const setIsCollapsed = externalSetCollapsed || setInternalCollapsed;
+
+  const navigation = [
+    { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { title: "Workspaces", href: "/workspaces", icon: FolderKanban },
+    { title: "Boards", href: "/boards", icon: ClipboardList },
+    { title: "Tasks", href: "/tasks", icon: CheckSquare },
+    { title: "Team", href: "/team", icon: Users },
+    { title: "Settings", href: "/settings", icon: Settings },
+  ];
+
+  const isActiveRoute = (href: string) => {
+    if (pathname === href) return true;
+    if (href !== "/" && pathname.startsWith(href + "/")) return true;
+    return false;
+  };
+
   return (
-    <div className="flex flex-col h-full bg-card border-r">
-      <div className="flex items-center justify-center h-16 border-b">
-        <Link href="/dashboard" className="text-xl font-bold text-blue-600">
-          TeamTrack
-        </Link>
+    <aside className="flex h-full w-full flex-col overflow-hidden bg-[#0a0a1a]/90 backdrop-blur-2xl border-r border-white/[0.06] transition-all duration-300">
+      {/* Logo + Toggle */}
+      <div
+        className={cn(
+          "relative flex h-16 items-center border-b border-white/[0.06] px-5 transition-all duration-300",
+          isCollapsed ? "justify-center px-0" : "justify-between"
+        )}
+      >
+        {!isCollapsed && (
+          <Link href="/dashboard" className="flex min-w-0 items-center gap-2.5">
+            <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              TeamTrack
+            </span>
+          </Link>
+        )}
+
+        <button
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="rounded-lg p-1.5 text-white/40 hover:text-white hover:bg-white/[0.08] transition-all lg:block hidden"
+        >
+          {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+        </button>
       </div>
 
-      <nav className="flex-1 p-4 space-y-1">
-        {navigation.map((item) => {
-          const Icon = item.icon;
-          const isActive =
-            pathname === item.href || pathname.startsWith(item.href + "/");
+      {/* Navigation */}
+      <nav className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden p-3 space-y-6">
+        <ul className="space-y-1">
+          {navigation.map((item) => {
+            const Icon = item.icon;
+            const isActive = isActiveRoute(item.href);
 
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors",
-                isActive
-                  ? "bg-blue-50 text-blue-600 font-medium"
-                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
-              )}
-            >
-              <Icon className="h-4 w-4" />
-              {item.name}
-            </Link>
-          );
-        })}
+            return (
+              <li key={item.title}>
+                <Link
+                  href={item.href}
+                  className={cn(
+                    "group relative flex min-w-0 items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-all",
+                    isActive
+                      ? "bg-white/[0.08] text-white"
+                      : "text-white/60 hover:text-white hover:bg-white/[0.04]",
+                    isCollapsed && "justify-center px-3"
+                  )}
+                  title={isCollapsed ? item.title : undefined}
+                >
+                  {isActive && !isCollapsed && (
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 bg-cyan-400 rounded-r" />
+                  )}
+
+                  <Icon className={cn(
+                    "h-5 w-5 flex-shrink-0",
+                    isActive ? "text-cyan-400" : "text-white/50 group-hover:text-white/80"
+                  )} />
+
+                  {!isCollapsed && <span className="min-w-0 truncate">{item.title}</span>}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </nav>
 
-      <div className="p-4 border-t">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-8 h-8 bg-linear-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+      {/* User Area */}
+      <div className="min-w-0 overflow-hidden border-t border-white/[0.06] p-4">
+        <div className={cn("flex min-w-0 items-center gap-3 rounded-xl p-2 hover:bg-white/[0.04]", 
+          isCollapsed && "justify-center"
+        )}>
+          <div className="w-9 h-9 flex-shrink-0 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-semibold">
             {user?.name?.charAt(0)?.toUpperCase() || "U"}
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">
-              {user?.name || "User"}
-            </p>
-            <p className="text-xs text-gray-500 truncate">
-              {user?.email || "user@example.com"}
-            </p>
-          </div>
+
+          {!isCollapsed && (
+            <>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-white truncate">{user?.name}</p>
+                <p className="text-xs text-white/40 truncate">{user?.email}</p>
+              </div>
+
+              <button
+                onClick={() => startTransition(async () => logout())}
+                disabled={isPending}
+                className="flex-shrink-0 p-2 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
+            </>
+          )}
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => startTransition(async () => logout())}
-          disabled={isPending}
-          className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
-        >
-          <LogOut className="h-4 w-4 mr-2" />
-          {isPending ? "Signing out..." : "Sign Out"}
-        </Button>
       </div>
-    </div>
+    </aside>
   );
 }

@@ -12,7 +12,7 @@ export default async function LoginPage() {
   const session = await getSession();
 
   if (session) {
-    redirect("/dashboard");
+    redirect("/workspaces");
   }
 
   return (
