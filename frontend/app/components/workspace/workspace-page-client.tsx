@@ -143,4 +143,4 @@ export function WorkspacePageClient({
       </div>
     </div>
   );
-}            
+}
