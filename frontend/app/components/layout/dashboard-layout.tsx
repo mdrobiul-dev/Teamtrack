@@ -62,4 +62,4 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
       </div>
     </div>
   );
-}   
+}
