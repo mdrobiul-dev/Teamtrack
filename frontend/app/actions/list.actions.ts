@@ -20,6 +20,12 @@ const createListSchema = z.object({
   title: z.string().min(2, "List title must be at least 2 characters"),
 });
 
+const deleteListSchema = z.object({
+  workspaceId: z.string().min(1, "Workspace ID is required"),
+  boardId: z.string().min(1, "Board ID is required"),
+  listId: z.string().min(1, "List ID is required"),
+});
+
 const reorderListsSchema = z.object({
   items: z
     .array(
@@ -57,6 +63,25 @@ export async function createListAction(input: {
     const data = await listService.createList(payload.boardId, payload.title);
     revalidatePath("/workspaces");
     return { success: true, message: "List created", data };
+  } catch (error) {
+    return { success: false, message: toErrorMessage(error) };
+  }
+}
+
+export async function deleteListAction(input: {
+  workspaceId: string;
+  boardId: string;
+  listId: string;
+}): Promise<ActionResult<{ listId: string }>> {
+  try {
+    const payload = deleteListSchema.parse(input);
+    const data = await listService.deleteList(payload.listId);
+    revalidatePath(`/workspaces/${payload.workspaceId}/boards/${payload.boardId}`);
+    return {
+      success: true,
+      message: data.message,
+      data: { listId: data.listId },
+    };
   } catch (error) {
     return { success: false, message: toErrorMessage(error) };
   }

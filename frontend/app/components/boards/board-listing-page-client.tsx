@@ -312,7 +312,7 @@ function BoardCard({
 
   return (
     <Link
-      href={`/boards?workspaceId=${workspaceId}&boardId=${board._id}`}
+      href={`/workspaces/${workspaceId}/boards/${board._id}`}
       className="group relative block overflow-hidden rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/[0.08] hover:border-cyan-400/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg hover:shadow-cyan-500/5 animate-fade-in"
       style={{ animationDelay: `${animationDelay}ms` }}
     >

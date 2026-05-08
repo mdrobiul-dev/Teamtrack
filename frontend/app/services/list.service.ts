@@ -11,6 +11,10 @@ export const listService = {
     return api.post<List>("/lists", { boardId, title });
   },
 
+  deleteList: async (listId: string) => {
+    return api.delete<{ message: string; listId: string }>(`/lists/${listId}`);
+  },
+
   reorderLists: async (items: { id: string; order: number }[]) => {
     return api.put<{ message: string }>("/lists/reorder", { items });
   },
