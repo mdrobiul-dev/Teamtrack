@@ -1,7 +1,13 @@
 import "server-only";
 import { cookies } from "next/headers";
 
-const BACKEND_URL = process.env.BACKEND_API_URL;
+const DEFAULT_PRODUCTION_BACKEND_URL = "https://teamtrack-api.onrender.com/api";
+const configuredBackendUrl = process.env.BACKEND_API_URL;
+const BACKEND_URL =
+  process.env.NODE_ENV === "production" &&
+  (!configuredBackendUrl || configuredBackendUrl.includes("localhost"))
+    ? DEFAULT_PRODUCTION_BACKEND_URL
+    : configuredBackendUrl;
 
 if (!BACKEND_URL) {
   throw new Error("BACKEND_API_URL not set in .env");
