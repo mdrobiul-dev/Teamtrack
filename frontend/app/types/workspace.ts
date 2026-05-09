@@ -9,6 +9,8 @@ export interface Workspace {
   name: string;
   owner: string;
   members: WorkspaceMember[];
+  boardCount?: number;
+  listCount?: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -18,6 +20,8 @@ export interface Board {
   title: string;
   workspace: string;
   createdby: string;
+  listCount?: number;
+  taskCount?: number;
   createdAt: string;
   updatedAt: string;
 }

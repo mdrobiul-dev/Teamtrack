@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   Users,
   LayoutDashboard,
-  CheckSquare,
+  ListChecks,
   Trash2,
   X,
   ArrowUpRight,
@@ -29,6 +29,8 @@ export function WorkspaceCard({ workspace, onDelete }: WorkspaceCardProps) {
   );
 
   const memberCount = workspace.members?.length || 0;
+  const boardCount = workspace.boardCount ?? 0;
+  const listCount = workspace.listCount ?? 0;
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -130,7 +132,9 @@ export function WorkspaceCard({ workspace, onDelete }: WorkspaceCardProps) {
         <div className="grid grid-cols-3 gap-3 mb-6">
           <div className="text-center">
             <LayoutDashboard className="w-4 h-4 mx-auto text-white/30 mb-1" />
-            <div className="text-lg font-semibold text-white/80">0</div>
+            <div className="text-lg font-semibold text-white/80">
+              {boardCount}
+            </div>
             <div className="text-[10px] text-white/30">Boards</div>
           </div>
 
@@ -143,9 +147,11 @@ export function WorkspaceCard({ workspace, onDelete }: WorkspaceCardProps) {
           </div>
 
           <div className="text-center">
-            <CheckSquare className="w-4 h-4 mx-auto text-white/30 mb-1" />
-            <div className="text-lg font-semibold text-white/80">0</div>
-            <div className="text-[10px] text-white/30">Tasks</div>
+            <ListChecks className="w-4 h-4 mx-auto text-white/30 mb-1" />
+            <div className="text-lg font-semibold text-white/80">
+              {listCount}
+            </div>
+            <div className="text-[10px] text-white/30">Lists</div>
           </div>
         </div>
 

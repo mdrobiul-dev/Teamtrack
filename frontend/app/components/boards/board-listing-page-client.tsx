@@ -83,8 +83,14 @@ export function BoardListingPageClient({
     });
   };
 
-  const totalTasks = 0;
-  const totalLists = 0;
+  const totalTasks = boards.reduce(
+    (total, board) => total + (board.taskCount ?? 0),
+    0,
+  );
+  const totalLists = boards.reduce(
+    (total, board) => total + (board.listCount ?? 0),
+    0,
+  );
   const hasBoards = boards.length > 0;
 
   return (
@@ -96,13 +102,13 @@ export function BoardListingPageClient({
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-2">
-          <button
-            onClick={() => router.push("/workspaces")}
+          <Link
+            href="/workspaces"
             className="group flex w-fit items-center gap-2 px-3 py-2 -ml-3 rounded-lg text-white/40 hover:text-white/80 hover:bg-white/[0.02] transition-all duration-200"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
             <span className="text-sm">Back to Workspaces</span>
-          </button>
+          </Link>
 
           {hasBoards && (
             <div className="flex flex-wrap items-center gap-4 text-xs text-white/30">
@@ -290,6 +296,8 @@ function BoardCard({
     month: "short",
     day: "numeric",
   });
+  const listCount = board.listCount ?? 0;
+  const taskCount = board.taskCount ?? 0;
 
   const handleDeleteClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -370,12 +378,16 @@ function BoardCard({
         <div className="grid grid-cols-2 gap-3 mb-6">
           <div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-3 text-center">
             <Hash className="w-4 h-4 mx-auto text-white/30 mb-1" />
-            <div className="text-lg font-semibold text-white/80">0</div>
+            <div className="text-lg font-semibold text-white/80">
+              {listCount}
+            </div>
             <div className="text-[10px] text-white/30">Lists</div>
           </div>
           <div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-3 text-center">
             <Calendar className="w-4 h-4 mx-auto text-white/30 mb-1" />
-            <div className="text-lg font-semibold text-white/80">0</div>
+            <div className="text-lg font-semibold text-white/80">
+              {taskCount}
+            </div>
             <div className="text-[10px] text-white/30">Tasks</div>
           </div>
         </div>
