@@ -1,6 +1,7 @@
 const Activity = require("../models/Activity");
 const Board = require("../models/Board");
 const Workspace = require("../models/Workspace");
+const { deleteBoardChildren } = require("../services/cascadeDelete.service");
 
 const createBoard = async (req, res) => {
   try {
@@ -116,7 +117,7 @@ const deleteBoard = async (req, res) => {
       });
     }
 
-    // Delete the board
+    const deleteSummary = await deleteBoardChildren(boardId);
     await Board.findByIdAndDelete(boardId);
 
     // Log activity
@@ -133,6 +134,7 @@ const deleteBoard = async (req, res) => {
     res.status(200).json({
       message: "Board deleted successfully",
       boardId: board._id,
+      ...deleteSummary,
     });
   } catch (error) {
     console.error("Delete Board Error:", error);

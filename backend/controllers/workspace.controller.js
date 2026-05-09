@@ -1,6 +1,9 @@
 const Activity = require("../models/Activity");
 const Workspace = require("../models/Workspace");
 const mongoose = require("mongoose");
+const {
+  deleteWorkspaceChildren,
+} = require("../services/cascadeDelete.service");
 
 const createWorkspace = async (req, res) => {
   try {
@@ -159,20 +162,12 @@ const deleteWorkspace = async (req, res) => {
         .json({ message: "Not authorized to delete this workspace" });
     }
 
+    const deleteSummary = await deleteWorkspaceChildren(workspaceId);
     await Workspace.findByIdAndDelete(workspaceId);
-
-    const activity = new Activity({
-      user: req.user.id,
-      action: "Workspace has been deleted",
-      entityType: "workspace",
-      entityId: workspace._id,
-      workspace: workspace._id,
-    });
-
-    await activity.save();
 
     res.status(200).json({
       message: "Workspace deleted successfully",
+      ...deleteSummary,
     });
   } catch (error) {
     console.error(error);
