@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import { requireAuth } from "@/app/lib/auth";
 import { boardService } from "@/app/services/board.service";
+import { listService } from "@/app/services/list.service";
+import { taskService } from "@/app/services/task.service";
 import { workspaceService } from "@/app/services/workspace.service";
 import type { Board, Workspace } from "@/app/types/workspace";
 
@@ -28,10 +30,31 @@ export default async function BoardsPage() {
 
   const workspaces = await workspaceService.getMyWorkspaces();
   const boardGroups = await Promise.all(
-    workspaces.map(async (workspace) => ({
-      workspace,
-      boards: await boardService.getBoardsByWorkspace(workspace._id),
-    })),
+    workspaces.map(async (workspace) => {
+      const boards = await boardService.getBoardsByWorkspace(workspace._id);
+      const boardsWithCounts = await Promise.all(
+        boards.map(async (board) => {
+          const lists = await listService.getListsByBoard(board._id);
+          const tasksByList = await Promise.all(
+            lists.map((list) => taskService.getTasksByList(list._id)),
+          );
+
+          return {
+            ...board,
+            listCount: lists.length,
+            taskCount: tasksByList.reduce(
+              (total, tasks) => total + tasks.length,
+              0,
+            ),
+          };
+        }),
+      );
+
+      return {
+        workspace,
+        boards: boardsWithCounts,
+      };
+    }),
   );
 
   const boards = boardGroups.flatMap(({ workspace, boards }) =>
@@ -42,6 +65,14 @@ export default async function BoardsPage() {
     })),
   );
   const hasBoards = boards.length > 0;
+  const totalLists = boards.reduce(
+    (total, board) => total + (board.listCount ?? 0),
+    0,
+  );
+  const totalTasks = boards.reduce(
+    (total, board) => total + (board.taskCount ?? 0),
+    0,
+  );
 
   return (
     <div className="min-h-screen bg-[#0a0a1a] relative overflow-hidden">
@@ -75,6 +106,16 @@ export default async function BoardsPage() {
                   {workspaces.length}{" "}
                   {workspaces.length === 1 ? "workspace" : "workspaces"}
                 </span>
+              </div>
+              <div className="w-px h-4 bg-white/10" />
+              <div className="flex items-center gap-1.5">
+                <Hash className="w-3.5 h-3.5" />
+                <span>{totalLists} lists</span>
+              </div>
+              <div className="w-px h-4 bg-white/10" />
+              <div className="flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5" />
+                <span>{totalTasks} tasks</span>
               </div>
             </div>
           )}
@@ -181,6 +222,8 @@ function BoardOverviewCard({
     month: "short",
     day: "numeric",
   });
+  const listCount = board.listCount ?? 0;
+  const taskCount = board.taskCount ?? 0;
 
   return (
     <Link
@@ -217,12 +260,16 @@ function BoardOverviewCard({
         <div className="grid grid-cols-2 gap-3 mb-6">
           <div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-3 text-center">
             <Hash className="w-4 h-4 mx-auto text-white/30 mb-1" />
-            <div className="text-lg font-semibold text-white/80">0</div>
+            <div className="text-lg font-semibold text-white/80">
+              {listCount}
+            </div>
             <div className="text-[10px] text-white/30">Lists</div>
           </div>
           <div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-3 text-center">
             <Calendar className="w-4 h-4 mx-auto text-white/30 mb-1" />
-            <div className="text-lg font-semibold text-white/80">0</div>
+            <div className="text-lg font-semibold text-white/80">
+              {taskCount}
+            </div>
             <div className="text-[10px] text-white/30">Tasks</div>
           </div>
         </div>

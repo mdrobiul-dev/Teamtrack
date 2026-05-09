@@ -7,7 +7,7 @@ import {
   FolderKanban,
   ClipboardList,
   CheckSquare,
-  Users,
+  History,
   Settings,
   LogOut,
   ChevronLeft,
@@ -46,7 +46,7 @@ export function SidebarContent({
     { title: "Workspaces", href: "/workspaces", icon: FolderKanban },
     { title: "Boards", href: "/boards", icon: ClipboardList },
     { title: "Tasks", href: "/tasks-list", icon: CheckSquare },
-    { title: "Team", href: "/team", icon: Users },
+    { title: "Activity", href: "/activity", icon: History  },
     { title: "Settings", href: "/settings", icon: Settings },
   ];
 
