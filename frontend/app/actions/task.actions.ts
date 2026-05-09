@@ -72,7 +72,7 @@ export async function createTaskAction(input: {
   try {
     const payload = createTaskSchema.parse(input);
     const task = await taskService.createTask(payload);
-    revalidatePath("/tasks");
+    revalidatePath("/tasks-list");
     return { success: true, message: "Task created successfully", data: task };
   } catch (error) {
     return { success: false, message: toErrorMessage(error) };
@@ -151,7 +151,7 @@ export async function assignTaskAction(input: {
     const response = await taskService.assignTask(payload.taskId, {
       userId: payload.userId,
     });
-    revalidatePath("/tasks");
+    revalidatePath("/tasks-list");
     return { success: true, message: response.message, data: response.task };
   } catch (error) {
     return { success: false, message: toErrorMessage(error) };
@@ -164,7 +164,7 @@ export async function unassignTaskAction(input: {
   try {
     const payload = unassignTaskSchema.parse(input);
     const response = await taskService.unassignTask(payload.taskId);
-    revalidatePath("/tasks");
+    revalidatePath("/tasks-list");
     return { success: true, message: response.message, data: response.task };
   } catch (error) {
     return { success: false, message: toErrorMessage(error) };
@@ -180,7 +180,7 @@ export async function moveTaskAction(input: {
     const response = await taskService.moveTask(payload.taskId, {
       targetListId: payload.targetListId,
     });
-    revalidatePath("/tasks");
+    revalidatePath("/tasks-list");
     return { success: true, message: response.message, data: response.task };
   } catch (error) {
     return { success: false, message: toErrorMessage(error) };
@@ -194,7 +194,7 @@ export async function reorderTasksAction(input: {
   try {
     const payload = reorderTaskSchema.parse(input);
     const response = await taskService.reorderTasks(payload);
-    revalidatePath("/tasks");
+    revalidatePath("/tasks-list");
     return { success: true, message: response.message };
   } catch (error) {
     return { success: false, message: toErrorMessage(error) };
@@ -207,7 +207,7 @@ export async function deleteTaskAction(input: {
   try {
     const payload = deleteTaskSchema.parse(input);
     const response = await taskService.deleteTask(payload.taskId);
-    revalidatePath("/tasks");
+    revalidatePath("/tasks-list");
     return { success: true, message: response.message };
   } catch (error) {
     return { success: false, message: toErrorMessage(error) };

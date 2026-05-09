@@ -21,7 +21,7 @@ export default async function DashboardPage() {
           Welcome back, {session.name}!
         </h1>
         <p className="mt-2 text-primary-500">
-          Here's what's happening with your projects today.
+          Here&apos;s what&apos;s happening with your projects today.
         </p>
       </div>
 
@@ -84,7 +84,7 @@ export default async function DashboardPage() {
         </Link>
 
         <Link
-          href="/tasks"
+          href="/tasks-list"
           className="bg-white border border-primary-100 rounded-2xl p-6 hover:border-primary-300 hover:shadow-lg transition-all duration-300 group"
         >
           <div className="w-12 h-12 bg-secondary-50 rounded-xl flex items-center justify-center mb-4">
@@ -106,7 +106,7 @@ export default async function DashboardPage() {
             Tasks
           </h3>
           <p className="text-primary-500 text-sm">
-            Track and manage your team's tasks
+            Track and manage your team&apos;s tasks
           </p>
           <ArrowRight className="w-5 h-5 text-primary-400 group-hover:text-secondary-600 group-hover:translate-x-1 transition-all duration-300 mt-4" />
         </Link>

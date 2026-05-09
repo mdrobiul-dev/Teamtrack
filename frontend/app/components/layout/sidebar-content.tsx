@@ -45,7 +45,7 @@ export function SidebarContent({
     { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { title: "Workspaces", href: "/workspaces", icon: FolderKanban },
     { title: "Boards", href: "/boards", icon: ClipboardList },
-    { title: "Tasks", href: "/tasks", icon: CheckSquare },
+    { title: "Tasks", href: "/tasks-list", icon: CheckSquare },
     { title: "Team", href: "/team", icon: Users },
     { title: "Settings", href: "/settings", icon: Settings },
   ];
