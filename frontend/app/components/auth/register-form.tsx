@@ -4,7 +4,6 @@ import { useActionState, useRef, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { register } from "@/app/actions/auth.actions";
-import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import {
   Card,

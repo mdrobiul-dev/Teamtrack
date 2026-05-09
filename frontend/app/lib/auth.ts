@@ -14,7 +14,6 @@ export const getSession = cache(async (): Promise<User | null> => {
 
 export const requireAuth = cache(async (): Promise<User> => {
   const session = await getSession();
-  if (!session) redirect('/login');
+  if (!session) redirect('/login?session=expired');
   return session;
 });
-

@@ -100,8 +100,7 @@ export function DashboardClient({
               Welcome back, {user.name}
             </h1>
             <p className="mt-2 text-sm text-white/35">
-              Your workspaces, boards, lists, and tasks are synced from the
-              backend.
+              Your workspaces, boards, lists, and tasks are all in one place.
             </p>
           </div>
 
