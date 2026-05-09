@@ -221,7 +221,11 @@ export function DashboardClient({
         </div>
 
         <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-2">
-          <Panel title="Active Boards" actionHref="/boards" actionLabel="Boards">
+          <Panel
+            title="Active Boards"
+            actionHref="/boards"
+            actionLabel="Boards"
+          >
             {recentBoards.length ? (
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {recentBoards.map((board) => (
