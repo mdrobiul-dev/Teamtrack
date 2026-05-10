@@ -45,25 +45,25 @@ export function CreateWorkspaceForm({ onSuccess }: CreateWorkspaceFormProps) {
       <form onSubmit={handleSubmit} className="relative group">
         <div className="absolute -inset-px bg-linear-to-r from-cyan-500/0 via-cyan-500/20 to-purple-500/0 rounded-3xl blur-sm opacity-0 group-hover:opacity-100 transition duration-700" />
 
-        <div className="relative rounded-3xl bg-white/2 backdrop-blur-2xl border border-white/8 p-6">
-          <div className="flex items-center gap-3">
+        <div className="relative rounded-3xl bg-white/2 backdrop-blur-2xl border border-white/8 p-4 sm:p-6">
+          <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center">
             <input
               type="text"
               value={workspaceName}
               onChange={(e) => setWorkspaceName(e.target.value)}
               placeholder="Workspace name"
-              className="flex-1 bg-transparent text-white/90 placeholder:text-white/30 
-                         border-0 outline-none text-base py-3 px-4"
+              className="min-w-0 flex-1 bg-transparent text-white/90 placeholder:text-white/30 
+                         border-0 outline-none text-base py-3 px-3 sm:px-4"
               disabled={isLoading}
             />
 
             <button
               type="submit"
               disabled={!workspaceName.trim() || isLoading}
-              className="flex items-center gap-2 px-6 py-3 rounded-2xl
+              className="flex w-full items-center justify-center gap-2 px-5 py-3 rounded-2xl
                          bg-white/5 hover:bg-white/10 border border-white/10 
                          hover:border-cyan-400/40 disabled:opacity-50
-                         text-white/70 hover:text-white transition-all active:scale-[0.97]"
+                         text-white/70 hover:text-white transition-all active:scale-[0.97] sm:w-auto sm:px-6"
             >
               {isLoading ? "Creating..." : "Create"}
               <ArrowRightIcon className="w-4 h-4" />
