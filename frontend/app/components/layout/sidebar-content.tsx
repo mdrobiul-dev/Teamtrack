@@ -25,12 +25,15 @@ interface SidebarContentProps {
   };
   isCollapsed?: boolean;
   setIsCollapsed?: (collapsed: boolean) => void;
+  /** Called after tapping a nav link (e.g. close mobile drawer). */
+  onNavClick?: () => void;
 }
 
 export function SidebarContent({ 
   user, 
   isCollapsed: externalCollapsed, 
-  setIsCollapsed: externalSetCollapsed 
+  setIsCollapsed: externalSetCollapsed,
+  onNavClick,
 }: SidebarContentProps) {
   
   const pathname = usePathname();
@@ -66,7 +69,11 @@ export function SidebarContent({
         )}
       >
         {!isCollapsed && (
-          <Link href="/dashboard" className="flex min-w-0 items-center gap-2.5">
+          <Link
+            href="/dashboard"
+            onClick={() => onNavClick?.()}
+            className="flex min-w-0 items-center gap-2.5"
+          >
             <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
               TeamTrack
             </span>
@@ -92,6 +99,7 @@ export function SidebarContent({
               <li key={item.title}>
                 <Link
                   href={item.href}
+                  onClick={() => onNavClick?.()}
                   className={cn(
                     "group relative flex min-w-0 items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-all",
                     isActive

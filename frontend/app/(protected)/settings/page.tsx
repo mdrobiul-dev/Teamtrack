@@ -54,7 +54,7 @@ export default async function SettingsPage() {
                 Account and workspace preferences
               </span>
             </div>
-            <h1 className="text-4xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white">
+            <h1 className="text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white sm:text-4xl">
               Settings
             </h1>
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/35">

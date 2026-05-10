@@ -253,10 +253,10 @@ export function WorkspaceBoardPageClient({
       </div>
 
       <div className="relative min-h-screen flex flex-col">
-        <header className="border-b border-white/5 bg-[#0a0a1a]/80 backdrop-blur-xl sticky top-0 z-50">
-          <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="h-16 flex items-center justify-between gap-4">
-              <div className="flex min-w-0 items-center gap-4">
+        <header className="sticky top-0 z-50 border-b border-white/5 bg-[#0a0a1a]/80 backdrop-blur-xl">
+          <div className="mx-auto max-w-full px-4 sm:px-6 lg:px-8">
+            <div className="flex min-h-16 flex-wrap items-center justify-between gap-3 py-2 sm:h-16 sm:flex-nowrap sm:gap-4 sm:py-0">
+              <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-4">
                 <button
                   type="button"
                   onClick={() => router.push(`/workspaces/${workspaceId}`)}
@@ -303,20 +303,20 @@ export function WorkspaceBoardPageClient({
                 </div>
               </div>
 
-              <div className="flex shrink-0 items-center gap-3">
+              <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-3">
                 <div
-                  className={`hidden sm:flex items-center gap-2 transition-all duration-300 ${
+                  className={`hidden items-center gap-2 transition-all duration-300 sm:flex ${
                     showSearch ? "w-64" : "w-0"
                   } overflow-hidden`}
                 >
-                  <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+                  <div className="relative min-w-0 flex-1">
+                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
                     <input
                       type="text"
                       placeholder="Search tasks..."
                       value={searchQuery}
                       onChange={(event) => setSearchQuery(event.target.value)}
-                      className="w-full pl-9 pr-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-white/90 placeholder:text-white/20 text-sm focus:outline-none focus:border-cyan-400/30"
+                      className="w-full rounded-lg border border-white/10 bg-white/5 py-1.5 pl-9 pr-3 text-sm text-white/90 placeholder:text-white/20 focus:border-cyan-400/30 focus:outline-none"
                     />
                   </div>
                 </div>
@@ -324,29 +324,44 @@ export function WorkspaceBoardPageClient({
                 <button
                   type="button"
                   onClick={() => setShowSearch(!showSearch)}
-                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 hover:text-white/90 transition-all duration-200"
+                  className="rounded-lg border border-white/10 bg-white/5 p-2 text-white/60 transition-all duration-200 hover:bg-white/10 hover:text-white/90"
                   aria-label="Toggle task search"
                 >
-                  <Search className="w-4 h-4" />
+                  <Search className="h-4 w-4" />
                 </button>
 
                 <button
                   type="button"
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-sm font-medium transition-all duration-200 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40"
+                  className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 px-3 py-2 text-sm font-medium text-white shadow-lg shadow-cyan-500/20 transition-all duration-200 hover:from-cyan-500 hover:to-blue-500 hover:shadow-cyan-500/40"
                 >
-                  <Share2 className="w-4 h-4" />
+                  <Share2 className="h-4 w-4" />
                   <span className="hidden sm:inline">Share</span>
                 </button>
 
                 <button
                   type="button"
-                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 hover:text-white/90 transition-all duration-200"
+                  className="rounded-lg border border-white/10 bg-white/5 p-2 text-white/60 transition-all duration-200 hover:bg-white/10 hover:text-white/90"
                   aria-label="Board settings"
                 >
-                  <Settings className="w-4 h-4" />
+                  <Settings className="h-4 w-4" />
                 </button>
               </div>
             </div>
+
+            {showSearch ? (
+              <div className="border-t border-white/5 px-4 py-3 sm:hidden">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
+                  <input
+                    type="text"
+                    placeholder="Search tasks..."
+                    value={searchQuery}
+                    onChange={(event) => setSearchQuery(event.target.value)}
+                    className="w-full rounded-lg border border-white/10 bg-white/5 py-2 pl-9 pr-3 text-sm text-white/90 placeholder:text-white/20 focus:border-cyan-400/30 focus:outline-none"
+                  />
+                </div>
+              </div>
+            ) : null}
           </div>
         </header>
 

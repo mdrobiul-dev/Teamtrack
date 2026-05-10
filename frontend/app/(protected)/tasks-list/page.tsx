@@ -137,7 +137,7 @@ export default async function TaskListsPage() {
                   {hasLists ? "Lists and tasks overview" : "Setup required"}
                 </span>
               </div>
-              <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white">
+              <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white sm:text-4xl">
                 Task Lists
               </h1>
               <p className="text-white/30 mt-2 text-sm">

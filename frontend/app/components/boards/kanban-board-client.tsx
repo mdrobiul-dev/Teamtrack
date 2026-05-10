@@ -326,14 +326,15 @@ export function KanbanBoardClient() {
         </CardContent>
       </Card>
 
-      <div className="flex gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <Input
           placeholder="Add a new list..."
           value={newListTitle}
           onChange={(e) => setNewListTitle(e.target.value)}
-          className="max-w-sm"
+          className="w-full sm:max-w-sm"
         />
         <Button
+          className="w-full shrink-0 sm:w-auto"
           onClick={handleCreateList}
           disabled={isPending || !selectedBoardId || newListTitle.trim().length < 2}
         >
@@ -341,13 +342,13 @@ export function KanbanBoardClient() {
         </Button>
       </div>
 
-      <div className="flex gap-4 overflow-x-auto pb-2">
+      <div className="-mx-1 flex gap-4 overflow-x-auto pb-2 px-1 [scrollbar-gutter:stable]">
         {orderedLists.map((list) => {
           const listTasks = [...(tasksByList[list._id] || [])].sort((a, b) => a.order - b.order);
           return (
             <div
               key={list._id}
-              className="w-80 shrink-0 rounded-lg border bg-white"
+              className="w-[min(85vw,20rem)] shrink-0 sm:w-80 rounded-lg border bg-white"
               onDragOver={(e) => e.preventDefault()}
               onDrop={() => handleListDrop(list._id)}
             >

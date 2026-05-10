@@ -1,10 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Bell, Sun, Moon, Command } from "lucide-react";
+import { Search, Bell, Sun, Moon, Command, Menu } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { Button } from "@/app/components/ui/button";
 
-export function TopNav() {
+interface TopNavProps {
+  onOpenMobileNav?: () => void;
+}
+
+export function TopNav({ onOpenMobileNav }: TopNavProps) {
   const [isDark, setIsDark] = useState(false);
   const [notifications] = useState(4);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -15,12 +20,25 @@ export function TopNav() {
   };
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b border-white/[0.06] bg-[#0a0a1a]/90 backdrop-blur-2xl px-6">
+    <header className="sticky top-0 z-40 flex h-16 min-h-16 shrink-0 items-center gap-2 border-b border-white/[0.06] bg-[#0a0a1a]/90 px-3 backdrop-blur-2xl sm:gap-4 sm:px-6">
       {/* Subtle bottom glow */}
       <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
 
+      {onOpenMobileNav ? (
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="h-10 w-10 shrink-0 border-white/15 bg-white/[0.06] p-0 text-white hover:bg-white/10 lg:hidden"
+          onClick={onOpenMobileNav}
+          aria-label="Open navigation menu"
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+      ) : null}
+
       {/* Search */}
-      <div className="relative flex-1 max-w-md">
+      <div className="relative min-w-0 flex-1 max-w-md">
         <div
           className={cn(
             "absolute inset-y-0 left-3 flex items-center gap-2 pointer-events-none transition-all",
@@ -34,9 +52,9 @@ export function TopNav() {
           placeholder="Search..."
           onFocus={() => setIsSearchFocused(true)}
           onBlur={() => setIsSearchFocused(false)}
-          className="w-full rounded-xl border border-white/10 bg-white/10 py-2 pl-10 pr-20 text-sm text-white/80 placeholder:text-white/20 outline-none transition-all duration-300 focus:border-cyan-400/30 focus:bg-white/[0.05] focus:ring-2 focus:ring-cyan-400/10"
+          className="w-full min-w-0 rounded-xl border border-white/10 bg-white/10 py-2 pl-10 pr-10 text-sm text-white/80 placeholder:text-white/20 outline-none transition-all duration-300 focus:border-cyan-400/30 focus:bg-white/[0.05] focus:ring-2 focus:ring-cyan-400/10 sm:pr-20"
         />
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-0.5">
+        <div className="absolute right-3 top-1/2 hidden -translate-y-1/2 items-center gap-0.5 sm:flex">
           <kbd className="px-1.5 py-0.5 text-[10px] rounded-md bg-white/[0.05] border border-white/[0.08] text-white/20 font-mono">
             <Command className="h-2.5 w-2.5 inline-block mr-0.5" />K
           </kbd>

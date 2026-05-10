@@ -114,11 +114,11 @@ export function WorkspacePageDetails({
         {/* Workspaces Grid */}
         {hasWorkspaces && (
           <div className="mb-12">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-3xl font-semibold text-white/90 tracking-tight">
+            <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <h2 className="text-2xl font-semibold tracking-tight text-white/90 sm:text-3xl">
                 My Workspaces
               </h2>
-              <span className="text-sm text-white/40 bg-white/5 px-4 py-1.5 rounded-full border border-white/10">
+              <span className="w-fit text-sm text-white/40 bg-white/5 px-4 py-1.5 rounded-full border border-white/10">
                 {optimisticWorkspaces.length} workspace
                 {optimisticWorkspaces.length !== 1 ? "s" : ""}
               </span>

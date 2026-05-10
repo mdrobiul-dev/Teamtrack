@@ -96,7 +96,7 @@ export function DashboardClient({
                 Live workspace overview
               </span>
             </div>
-            <h1 className="text-4xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white">
+            <h1 className="text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white sm:text-4xl">
               Welcome back, {user.name}
             </h1>
             <p className="mt-2 text-sm text-white/35">

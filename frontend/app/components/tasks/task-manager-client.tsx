@@ -267,13 +267,14 @@ export function TaskManagerClient() {
               </select>
             </div>
           </div>
-          <div className="flex items-center justify-between rounded-md bg-muted px-3 py-2 text-sm">
-            <span className="text-muted-foreground">
+          <div className="flex flex-col gap-2 rounded-md bg-muted px-3 py-2 text-sm sm:flex-row sm:items-center sm:justify-between">
+            <span className="min-w-0 text-muted-foreground">
               {selectedList ? `Selected List: ${selectedList.title}` : "Select list to manage tasks"}
             </span>
             <Button
               variant="outline"
               size="sm"
+              className="w-full shrink-0 sm:w-auto"
               onClick={() => selectedListId && loadTasksForList(selectedListId)}
               disabled={!selectedListId || isPending}
             >
